@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Premium Hybrid Study Workspace (JEE / NEET)</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(180deg, #FFFDE4 0%, #FFFFFF 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* FANCY PARENT LANDING SCREEN */
+        #parent-landing-view {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 85vh;
+            text-align: center;
+            color: #1e293b;
+            padding: 20px;
+        }
+
+        #parent-landing-view h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, #2563EB, #dc2626);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #parent-landing-view p {
+            font-size: 1.2rem;
+            color: #475569;
+            margin-bottom: 40px;
+            max-width: 600px;
+            font-weight: 600;
+        }
+
+        /* INTERACTIVE SLIDE TO UNLOCK BUTTON */
+        .slide-unlock-container {
+            position: relative;
+            width: 320px;
+            height: 60px;
+            background: #1e293b;
+            border-radius: 50px;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2);
+            user-select: none;
+            overflow: hidden;
+        }
+
+        .slide-unlock-text {
+            color: #94a3b8;
+            font-weight: 700;
+            font-size: 0.95rem;
+            z-index: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .slide-unlock-handle {
+            position: absolute;
+            left: 5px;
+            width: 50px;
+            height: 50px;
+            background: #2563EB;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: grab;
+            z-index: 2;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .slide-unlock-handle:active {
+            cursor: grabbing;
+        }
+
+        /* PREMIUM AUTH SCENE */
+        #auth-view {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            min-height: 85vh;
+        }
+
+        .auth-card {
+            background: #1e293b;
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .auth-card h2 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .auth-card p {
+            color: #94a3b8;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+            text-align: center;
+        }
+
+        .auth-card input, .auth-card select {
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+        }
+
+        .auth-toggle {
+            color: #38bdf8;
+            text-align: center;
+            margin-top: 15px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* MAIN DASHBOARD SCENE */
+        #dashboard-view {
+            display: none;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            padding-top: 50px;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -1px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        .logout-link {
+            position: absolute;
+            top: 0; 
+            right: 50%;
+            transform: translateX(50%);
+            background: #334155;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto 30px auto;
+        }
+
+        @media (max-width: 1100px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+        }
+
+        .blue-column { background-color: #2563EB; }
+        .yellow-column { background-color: #EAB308; }
+        .red-column { background-color: #DC2626; }
+
+        h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #ffffff;
+        }
+
+        input[type="text"], input[type="number"], input[type="email"], input[type="password"], select {
+            width: 100%;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            color: white;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        select option { color: #333; }
+        input::placeholder { color: rgba(255, 255, 255, 0.7); }
+
+        input[type="date"] {
+            width: 100%;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            color: white;
+            outline: none;
+            cursor: pointer;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
+
+        .item-list {
+            list-style: none;
+            max-height: 220px;
+            overflow-y: auto;
+        }
+
+        .item-list li {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            gap: 10px;
+        }
+
+        .action-btn {
+            background: white;
+            color: #1a1a1a;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .delete-btn {
+            background: #ef4444;
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .delete-btn:hover {
+            background: #dc2626;
+        }
+
+        .timer-box {
+            background: rgba(255, 255, 255, 0.12);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 25px 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .clock-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 15, 30, 0.99);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+            padding: 20px;
+        }
+
+        .flip-clock-container { 
+            display: flex; 
+            gap: 20px; 
+            margin-bottom: 40px; 
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .flip-card {
+            background: #1e293b;
+            padding: 35px 25px;
+            border-radius: 20px;
+            font-size: 6.5rem;
+            font-family: 'Share Tech Mono', monospace;
+            min-width: 150px;
+            text-align: center;
+            box-shadow: 0 20px 45px rgba(0,0,0,0.6);
+            border-bottom: 8px solid #0f172a;
+        }
+
+        .clock-controls {
+            display: flex; 
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .white-card {
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 16px;
+            padding: 16px;
+            color: #1a1a1a;
+            margin-top: 10px;
+        }
+
+        .syllabus-scroll-box {
+            background: rgba(255, 255, 255, 0.95);
+            color: #334155;
+            padding: 15px;
+            border-radius: 12px;
+            max-height: 250px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+
+        .subject-header {
+            font-weight: 800;
+            color: #1e3a8a;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 2px;
+        }
+
+        .syllabus-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+            cursor: pointer;
+        }
+
+        .syllabus-item input {
+            width: auto;
+            margin-top: 3px;
+        }
+
+        .table-wrapper {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+
+        .score-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            color: #1e293b !important;
+        }
+
+        .score-table th {
+            color: #475569;
+            font-weight: 700;
+            padding: 10px;
+            border-bottom: 2px solid #cbd5e1;
+        }
+
+        .score-table td {
+            padding: 10px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #1e293b !important;
+        }
+
+        .premium-footer-box {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #1e293b;
+            border-radius: 24px;
+            padding: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .phase-box {
+            border-left: 4px solid #2563EB;
+            padding: 8px;
+            margin-top: 8px;
+            background: #f8fafc;
+            border-radius: 6px;
+        }
+
+        .badge-clock-btn {
+            background: white;
+            color: #2563EB;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-right: 5px;
+            white-space: nowrap;
+        }
+
+        .score-inputs-vertical-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .score-inputs-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .streak-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        .streak-num {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #fdba74;
+        }
+
+        @media (min-width: 600px) {
+            header { padding-top: 0; }
+            .logout-link { top: 0; right: 20px; transform: none; }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 20px 10px; }
+            header h1 { font-size: 2.1rem; }
+            header p { font-size: 0.95rem; }
+            .column { padding: 20px 15px; }
+            .premium-footer-box { flex-direction: column; text-align: center; }
+            .premium-footer-box .action-btn { width: 100%; }
+            .flip-clock-container { gap: 8px; }
+            .flip-card { font-size: 2.5rem; padding: 20px 10px; min-width: 75px; border-bottom-width: 4px; }
+            #clock-overlay-title { font-size: 1.5rem !important; text-align: center; }
+            .clock-controls { flex-direction: column; gap: 12px; }
+            .clock-controls .action-btn { width: 100%; padding: 12px 20px !important; font-size: 0.95rem !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="parent-landing-view">
+        <h1>Hybrid Study Hub</h1>
+        <p>Your secure cloud workspace environment tailored for strategic JEE and NEET performance engineering.</p>
+        
+        <div class="slide-unlock-container" id="slide-container">
+            <div class="slide-unlock-text">Slide to Enter Workspace</div>
+            <div class="slide-unlock-handle" id="slide-handle">
+                <i class="fa-solid fa-angles-right"></i>
+            </div>
+        </div>
+    </div>
+
+    <div id="auth-view" class="auth-container">
+        <div class="auth-card">
+            <h2 id="auth-title" style="color:#38bdf8; text-align:center;"><i class="fa-solid fa-lock"></i> Account Sign In</h2>
+            <p id="auth-desc">Enter your credentials to sync secure cloud workspace.</p>
+            
+            <div id="signup-only-fields" style="display:none;">
+                <input type="text" id="auth-name" placeholder="Enter Your Full Name">
+                <select id="auth-class">
+                    <option value="">Select Your Current Class</option>
+                    <option value="Class 11">Class 11 (Plus One Syllabus)</option>
+                    <option value="Class 12">Class 12 (Plus Two Syllabus)</option>
+                </select>
+                <select id="auth-exam">
+                    <option value="">Select Target Exam</option>
+                    <option value="NEET">NEET (Medical Stream)</option>
+                    <option value="JEE">JEE (Engineering Stream)</option>
+                </select>
+            </div>
+            
+            <input type="email" id="auth-email" placeholder="Email Address">
+            <input type="password" id="auth-password" placeholder="Secure Password">
+            
+            <button class="action-btn" style="width:100%; margin-top:10px; background:#38bdf8; color:white;" id="auth-submit-btn">Login to Workspace</button>
+            <div class="auth-toggle" id="auth-toggle-btn">New student? Create an account (Sign Up)</div>
+        </div>
+    </div>
+
+    <div id="dashboard-view">
+        <header>
+            <h1 id="welcome-heading">Hello User! 👋</h1>
+            <p id="class-tagline">Strategic Study Focus Workspace</p>
+            <button class="logout-link" id="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Lock Screen</button>
+        </header>
+
+        <div class="dashboard-grid">
+            <div class="column blue-column">
+                <div>
+                    <h2><i class="fa-solid fa-list-check"></i> Daily Tasks</h2>
+                    
+                    <div class="streak-card">
+                        <div>
+                            <span style="font-size:0.85rem; display:block; opacity:0.9;">🔥 Focus Streak</span>
+                            <strong id="badge-label" style="font-size:0.95rem; color:#67e8f9;">Novice Learner</strong>
+                        </div>
+                        <div class="streak-num" id="streak-counter-ui">0 Days</div>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px; margin-bottom: 15px;">
+                        <input type="text" id="todo-input" placeholder="Task Name (e.g., Solve Mock Problems)">
+                        <div style="display: flex; gap: 10px;">
+                            <input type="number" id="todo-time" placeholder="Target Time (Mins)" min="1">
+                            <button class="action-btn" id="todo-add-btn">Add Task</button>
+                        </div>
+                    </div>
+                    <ul id="todo-list" class="item-list"></ul>
+                </div>
+                
+                <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.2); margin: 5px 0;">
+
+                <div>
+                    <h2><i class="fa-solid fa-square-poll-vertical"></i> Custom Chapter Tracker</h2>
+                    <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
+                        <input type="text" id="task-title" placeholder="Topic details...">
+                        <select id="task-subject"></select>
+                        <button class="action-btn" id="chapter-log-btn">Log Progress</button>
+                    </div>
+                    <ul id="task-list" class="item-list" style="margin-top: 15px;"></ul>
+                </div>
+            </div>
+
+            <div class="column yellow-column">
+                <h2><i class="fa-solid fa-hourglass-start"></i> Focus Engine</h2>
+                
+                <div class="timer-box" id="launch-clock-box">
+                    <i class="fa-solid fa-expand-arrows-alt"></i>
+                    <h3 style="font-size: 1.3rem; margin-bottom: 5px;">Launch Study Clock</h3>
+                    <p id="clock-status-text" style="opacity: 0.8; font-size: 0.85rem;">Mode: Free Flow Stopwatch</p>
+                </div>
+
+                <div style="background: rgba(255, 255, 255, 0.15); padding: 20px; border-radius: 16px;">
+                    <h3 style="font-size: 1.15rem; margin-bottom: 5px;"><i class="fa-solid fa-graduation-cap"></i> AI Auto-Syllabus Test Planner</h3>
+                    <p style="font-size: 0.75rem; opacity: 0.9; margin-bottom: 10px;">Select chapters below to generate a phase strategy blueprint.</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <input type="text" id="planner-test-title" placeholder="Test Name (e.g., Major Mock Test-1)">
+                        <input type="date" id="planner-test-date">
+                        
+                        <label style="font-size: 0.8rem; font-weight: bold; margin-top: 5px; display: block;">Select Chapters to Include:</label>
+                        <div class="syllabus-scroll-box" id="syllabus-checklist-container"></div>
+
+                        <button class="action-btn" style="margin-top: 10px;" id="generate-plan-btn">Generate Live Blueprint</button>
+                    </div>
+                    <div id="planner-output-card" class="white-card" style="display: none; font-size: 0.85rem; color:#334155;"></div>
+                </div>
+            </div>
+
+            <div class="column red-column">
+                <h2><i class="fa-solid fa-chart-pie"></i> Marks Performance Hub</h2>
+                
+                <div class="score-inputs-vertical-stack">
+                    <div class="score-inputs-row">
+                        <input type="date" id="score-date">
+                        <input type="text" id="score-name" placeholder="Test Label">
+                    </div>
+                    <div id="dynamic-score-inputs-container"></div>
+                    <button class="action-btn" style="margin-top: 5px;" id="update-score-btn">Update Performance Hub</button>
+                </div>
+
+                <div class="white-card"><div style="position: relative; height: 160px; width: 100%;"><canvas id="performanceChart"></canvas></div></div>
+                <div class="white-card"><div style="position: relative; height: 150px; width: 100%;"><canvas id="pieChart"></canvas></div></div>
+
+                <div class="white-card" style="padding: 10px;">
+                    <div class="table-wrapper">
+                        <table class="score-table">
+                            <thead>
+                                <tr>
+                                    <th>Test Metric</th>
+                                    <th>Subject Breakdown</th>
+                                    <th>Sum</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="score-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="premium-footer-box">
+            <div>
+                <div class="flashcard-title"><i class="fa-solid fa-bolt"></i> High-Yield Hybrid Formula Desk</div>
+                <p id="formula-text" style="color: #cbd5e1; font-size: 0.95rem;">Loading targeted study pointers...</p>
+            </div>
+            <button class="action-btn" style="padding: 10px 20px; font-size: 0.9rem; background: #334155; color: white;" id="next-formula-btn">Next Formula</button>
+        </div>
+    </div>
+
+    <div id="clock-overlay" class="clock-overlay">
+        <h2 id="clock-overlay-title" style="font-size: 2.5rem; margin-bottom: 30px; letter-spacing: 2px;"><i class="fa-solid fa-brain"></i> DEEP STUDY STREAM</h2>
+        <div class="flip-clock-container">
+            <div class="flip-card" id="flip-hr">00</div>
+            <div class="flip-card" id="flip-min">00</div>
+            <div class="flip-card" id="flip-sec">00</div>
+        </div>
+        <div class="clock-controls">
+            <button class="action-btn" style="background: #22c55e; color: white; padding: 15px 35px; font-size: 1.1rem; border-radius: 50px;" id="start-pause-btn">Start Session</button>
+            <button class="action-btn" style="background: #ef4444; color: white; padding: 15px 35px; font-size: 1.1rem; border-radius: 50px;" id="reset-clock-btn">Reset</button>
+            <button class="action-btn" style="background: #3f3f46; color: white; padding: 15px 35px; font-size: 1.1rem; border-radius: 50px;" id="exit-clock-btn">Exit View</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Firebase Setup
+        const firebaseConfig = {
+          apiKey: "AIzaSyDtgU2S6fN2NFVzq9bhebydipumwUnAEhQ",
+          authDomain: "hybrid-study-workspace-1.firebaseapp.com",
+          projectId: "hybrid-study-workspace-1",
+          storageBucket: "hybrid-study-workspace-1.firebasestorage.app",
+          messagingSenderId: "309093518606",
+          appId: "1:309093518606:web:92a5f14596f5adb17d1b5f"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // State Machine
+        let isSignUpMode = false;
+        let activeUserMeta = null;
+        let state = { todos: [], chapters: [], tests: [], activeStrategicPlan: null, streak: 0 };
+
+        const MASTER_SYLLABUS = {
+            "NEET": {
+                "Class 11": {
+                    "Physics": ["Units and Measurements", "Motion in a Straight Line", "Motion in a Plane", "Laws of Motion", "Work, Energy and Power", "Rotational Motion", "Gravitation", "Mechanical Properties", "Thermal Properties", "Thermodynamics", "Kinetic Theory", "Oscillations & Waves"],
+                    "Chemistry": ["Basic Concepts", "Structure of Atom", "Classification", "Chemical Bonding", "Thermodynamics", "Equilibrium", "Redox Reactions", "Organic Chemistry", "Hydrocarbons"],
+                    "Botany": ["The Living World", "Biological Classification", "Plant Kingdom", "Morphology", "Anatomy", "Cell Cycle"],
+                    "Zoology": ["Animal Kingdom", "Structural Organisation", "Biomolecules", "Breathing", "Circulation", "Excretion", "Locomotion", "Neural Control"]
+                },
+                "Class 12": {
+                    "Physics": ["Electrostatics", "Current Electricity", "Moving Charges", "Magnetism", "EMI & AC", "EM Waves", "Ray Optics", "Wave Optics", "Dual Nature", "Atoms & Nuclei", "Semiconductors"],
+                    "Chemistry": ["Solutions", "Electrochemistry", "Chemical Kinetics", "d & f Block", "Coordination", "Haloalkanes", "Alcohols", "Aldehydes", "Amines", "Biomolecules"],
+                    "Botany": ["Reproduction in Plants", "Principles of Inheritance", "Molecular Basis", "Ecosystem", "Biodiversity"],
+                    "Zoology": ["Human Reproduction", "Reproductive Health", "Evolution", "Human Health", "Biotechnology"]
+                }
+            },
+            "JEE": {
+                "Class 11": {
+                    "Physics": ["Units & Measurements", "Kinematics", "Laws of Motion", "Work, Energy & Power", "Rotational Motion", "Gravitation", "Thermodynamics", "Oscillations & Waves"],
+                    "Chemistry": ["Basic Concepts", "Atomic Structure", "Chemical Bonding", "Thermodynamics", "Solutions", "Equilibrium", "Redox Reactions"],
+                    "Mathematics": ["Sets & Functions", "Complex Numbers", "Matrices & Determinants", "Permutations", "Binomial Theorem", "Sequences & Series"]
+                },
+                "Class 12": {
+                    "Physics": ["Electrostatics", "Current Electricity", "Magnetic Effects", "EMI & AC", "Optics", "Modern Physics", "Electronic Devices"],
+                    "Chemistry": ["Coordination Compounds", "d and f Block Elements", "Organic Principles", "Hydrocarbons", "Biomolecules"],
+                    "Mathematics": ["Limits & Continuity", "Integral Calculus", "Differential Equations", "Vector Algebra", "3D Geometry", "Probability"]
+                }
+            }
+        };
+
+        // INTERACTIVE SLIDER MECHANICS
+        const slideHandle = document.getElementById('slide-handle');
+        const slideContainer = document.getElementById('slide-container');
+        let isDragging = false;
+        let startX = 0;
+        const maxSlide = slideContainer.clientWidth - slideHandle.clientWidth - 10;
+
+        function startDrag(e) {
+            isDragging = true;
+            startX = (e.type === 'touchstart') ? e.touches[0].clientX : e.clientX;
+            slideHandle.style.transition = 'none';
+        }
+
+        function drag(e) {
+            if (!isDragging) return;
+            const currentX = (e.type === 'touchmove') ? e.touches[0].clientX : e.clientX;
+            let deltaX = currentX - startX;
+            if (deltaX < 0) deltaX = 0;
+            if (deltaX > maxSlide) deltaX = maxSlide;
+            slideHandle.style.left = (deltaX + 5) + 'px';
+
+            if (deltaX >= maxSlide) {
+                isDragging = false;
+                document.getElementById('parent-landing-view').style.display = 'none';
+                document.getElementById('auth-view').style.display = 'flex';
+                // Trigger auth state evaluation layout check
+                if (auth.currentUser) {
+                    document.getElementById('auth-view').style.display = 'none';
+                    document.getElementById('dashboard-view').style.display = 'block';
+                }
+            }
+        }
+
+        function stopDrag() {
+            if (!isDragging) return;
+            isDragging = false;
+            slideHandle.style.transition = 'left 0.3s ease';
+            slideHandle.style.left = '5px';
+        }
+
+        slideHandle.addEventListener('mousedown', startDrag);
+        slideHandle.addEventListener('touchstart', startDrag);
+        window.addEventListener('mousemove', drag);
+        window.addEventListener('touchmove', drag);
+        window.addEventListener('mouseup', stopDrag);
+        window.addEventListener('touchend', stopDrag);
+
+        // AUTH CONTROL ENGINE
+        document.getElementById('auth-toggle-btn').addEventListener('click', () => {
+            isSignUpMode = !isSignUpMode;
+            const title = document.getElementById('auth-title');
+            const desc = document.getElementById('auth-desc');
+            const extraFields = document.getElementById('signup-only-fields');
+            const submitBtn = document.getElementById('auth-submit-btn');
+            const toggleBtn = document.getElementById('auth-toggle-btn');
+
+            if(isSignUpMode) {
+                title.innerHTML = `<i class="fa-solid fa-user-plus"></i> Student Registration`;
+                desc.innerText = "Create your centralized cloud profile data vault.";
+                extraFields.style.display = "block";
+                submitBtn.innerText = "Register & Launch Dashboard";
+                toggleBtn.innerText = "Already registered? Login here";
+            } else {
+                title.innerHTML = `<i class="fa-solid fa-lock"></i> Account Sign In`;
+                desc.innerText = "Enter your credentials to sync secure cloud workspace.";
+                extraFields.style.display = "none";
+                submitBtn.innerText = "Login to Workspace";
+                toggleBtn.innerText = "New student? Create an account (Sign Up)";
+            }
+        });
+
+        document.getElementById('auth-submit-btn').addEventListener('click', async () => {
+            const email = document.getElementById('auth-email').value.trim();
+            const password = document.getElementById('auth-password').value;
+
+            if(!email || !password) {
+                alert("Please fill all required Email and Password inputs.");
+                return;
+            }
+
+            if(isSignUpMode) {
+                const name = document.getElementById('auth-name').value.trim();
+                const className = document.getElementById('auth-class').value;
+                const targetExam = document.getElementById('auth-exam').value;
+
+                if(!name || !className || !targetExam) {
+                    alert("Registration requires Name, Class, and Target Exam setups.");
+                    return;
+                }
+
+                try {
+                    const res = await createUserWithEmailAndPassword(auth, email, password);
+                    const userMeta = { name, className, targetExam, email };
+                    await setDoc(doc(db, "users", res.user.uid), userMeta);
+                    await setDoc(doc(db, "userData", res.user.uid), { todos: [], chapters: [], tests: [], activeStrategicPlan: null, streak: 0 });
+                    alert("Account Created successfully!");
+                } catch (err) {
+                    alert("Registration Error: " + err.message);
+                }
+            } else {
+                try {
+                    await signInWithEmailAndPassword(auth, email, password);
+                } catch (err) {
+                    alert("Login Failed: Invalid Email or Password configuration.");
+                }
+            }
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            signOut(auth).then(() => { location.reload(); });
+        });
+
+        async function saveStateToCloud() {
+            if(auth.currentUser) {
+                try {
+                    await setDoc(doc(db, "userData", auth.currentUser.uid), state);
+                } catch (e) {
+                    console.error("Cloud sync error: ", e);
+                }
+            }
+        }
+
+        onAuthStateChanged(auth, async (user) => {
+            if(user && document.getElementById('parent-landing-view').style.display === 'none') {
+                document.getElementById('auth-view').style.display = 'none';
+                document.getElementById('dashboard-view').style.display = 'block';
+
+                const metaSnap = await getDoc(doc(db, "users", user.uid));
+                if(metaSnap.exists()) {
+                    activeUserMeta = metaSnap.data();
+                    document.getElementById('welcome-heading').innerText = `Hello ${activeUserMeta.name}! 👋`;
+                    document.getElementById('class-tagline').innerText = `Strategic Cloud Hub • Exam: ${activeUserMeta.targetExam} • Class Status: ${activeUserMeta.className}`;
+                }
+
+                const dataSnap = await getDoc(doc(db, "userData", user.uid));
+                if(dataSnap.exists()) {
+                    const cloudData = dataSnap.data();
+                    state.todos = cloudData.todos || [];
+                    state.chapters = cloudData.chapters || [];
+                    state.tests = cloudData.tests || [];
+                    state.activeStrategicPlan = cloudData.activeStrategicPlan || null;
+                    state.streak = cloudData.streak || 0;
+                }
+
+                configureSubjectSelectors();
+                configureScoreInputsLayout();
+                buildAutoSyllabusChecklist();
+                updateStreakUI();
+                initAppLifecycle();
+            } else if (!user && document.getElementById('parent-landing-view').style.display === 'none') {
+                document.getElementById('auth-view').style.display = 'flex';
+                document.getElementById('dashboard-view').style.display = 'none';
+            }
+        });
+
+        function configureSubjectSelectors() {
+            const selectObj = document.getElementById('task-subject');
+            if(!selectObj || !activeUserMeta) return;
+            selectObj.innerHTML = '';
+            const subs = activeUserMeta.targetExam === "JEE" ? ["Physics", "Chemistry", "Mathematics"] : ["Physics", "Chemistry", "Botany", "Zoology"];
+            subs.forEach(s => {
+                let opt = document.createElement('option');
+                opt.value = s; opt.innerText = s;
+                selectObj.appendChild(opt);
+            });
+        }
+
+        function configureScoreInputsLayout() {
+            const container = document.getElementById('dynamic-score-inputs-container');
+            if(!container || !activeUserMeta) return;
+            container.innerHTML = '';
+            const subs = activeUserMeta.targetExam === "JEE" ? ["Physics", "Chemistry", "Mathematics"] : ["Physics", "Chemistry", "Botany", "Zoology"];
+            const maxVal = activeUserMeta.targetExam === "JEE" ? 100 : 180;
+
+            let currentStr = `<div class="score-inputs-vertical-stack">`;
+            for(let i=0; i < subs.length; i+=2) {
+                currentStr += `<div class="score-inputs-row">`;
+                currentStr += `<input type="number" id="score-sub-${subs[i].toLowerCase()}" placeholder="${subs[i]} (${maxVal})" max="${maxVal}">`;
+                if(subs[i+1]) {
+                    currentStr += `<input type="number" id="score-sub-${subs[i+1].toLowerCase()}" placeholder="${subs[i+1]} (${maxVal})" max="${maxVal}">`;
+                } else {
+                    currentStr += `<div></div>`;
+                }
+                currentStr += `</div>`;
+            }
+            currentStr += `</div>`;
+            container.innerHTML = currentStr;
+        }
+
+        function buildAutoSyllabusChecklist() {
+            const box = document.getElementById('syllabus-checklist-container');
+            if(!box || !activeUserMeta) return;
+            box.innerHTML = '';
+            const exam = activeUserMeta.targetExam;
+            const targetClass = activeUserMeta.className;
+            const syllabusData = MASTER_SYLLABUS[exam] ? MASTER_SYLLABUS[exam][targetClass] : null;
+
+            if(!syllabusData) return;
+            for(let subject in syllabusData) {
+                const subHead = document.createElement('div');
+                subHead.className = 'subject-header';
+                subHead.innerText = `■ ${subject} (${targetClass})`;
+                box.appendChild(subHead);
+
+                syllabusData[subject].forEach((chapter) => {
+                    const label = document.createElement('label');
+                    label.className = 'syllabus-item';
+                    label.innerHTML = `
+                        <input type="checkbox" class="plan-chapter-checkbox" data-subject="${subject}" value="${chapter}">
+                        <span>${chapter}</span>
+                    `;
+                    box.appendChild(label);
+                });
+            }
+        }
+
+        function updateStreakUI() {
+            document.getElementById('streak-counter-ui').innerText = `${state.streak || 0} Days`;
+            let badge = "Novice Learner";
+            if(state.streak >= 3) badge = "Focus Ninja 🥷";
+            if(state.streak >= 7) badge = "Elite Scholar 🎓";
+            document.getElementById('badge-label').innerText = badge;
+        }
+
+        // TASK APP EVENT LISTENERS
+        document.getElementById('todo-add-btn').addEventListener('click', async () => {
+            const input = document.getElementById('todo-input');
+            const timeInput = document.getElementById('todo-time');
+            if (!input || !input.value.trim()) return;
+            state.todos.push({ text: input.value.trim(), timeLimit: timeInput.value ? parseInt(timeInput.value) : null });
+            await saveStateToCloud(); 
+            renderTodos();
+            input.value = ''; timeInput.value = '';
+        });
+
+        document.getElementById('chapter-log-btn').addEventListener('click', async () => {
+            const title = document.getElementById('task-title');
+            const subject = document.getElementById('task-subject');
+            if (!title || !title.value.trim()) return;
+            state.chapters.push({ title: title.value.trim(), subject: subject.value });
+            await saveStateToCloud(); 
+            renderChapters(); 
+            title.value = '';
+        });
+
+        document.getElementById('generate-plan-btn').addEventListener('click', async () => {
+            const title = document.getElementById('planner-test-title').value || "Mock Evaluation Framework";
+            const dateVal = document.getElementById('planner-test-date').value;
+            const checkboxes = document.querySelectorAll('.plan-chapter-checkbox:checked');
+            let selectedChapters = [];
+            checkboxes.forEach(cb => { selectedChapters.push({ subject: cb.getAttribute('data-subject'), title: cb.value }); });
+
+            if(!dateVal || selectedChapters.length === 0) {
+                alert("Please select a Target Date and at least one Chapter checklist.");
+                return;
+            }
+
+            const today = new Date();
+            const examDate = new Date(dateVal);
+            const diffDays = Math.ceil((examDate - today) / (1000 * 60 * 60 * 24));
+            if(diffDays < 0) { alert("Target test date has already passed."); return; }
+
+            const p1Days = Math.max(1, Math.floor(diffDays * 0.60));
+            const p2Days = Math.max(1, Math.floor(diffDays * 0.25));
+            const p3Days = Math.max(1, diffDays - (p1Days + p2Days));
+
+            state.activeStrategicPlan = { title, diffDays, count: selectedChapters.length, p1Days, p2Days, p3Days };
+            await saveStateToCloud(); 
+            renderStrategicPlan();
+        });
+
+        document.getElementById('update-score-btn').addEventListener('click', async () => {
+            const date = document.getElementById('score-date').value;
+            const name = document.getElementById('score-name').value || "Test Assessment";
+            if (!date) { alert("Invalid date parameter."); return; }
+
+            let scoreObj = { date, name };
+            const maxVal = activeUserMeta.targetExam === "JEE" ? 100 : 180;
+
+            if(activeUserMeta.targetExam === "JEE") {
+                const p = parseInt(document.getElementById('score-sub-physics').value) || 0;
+                const c = parseInt(document.getElementById('score-sub-chemistry').value) || 0;
+                const m = parseInt(document.getElementById('score-sub-mathematics').value) || 0;
+                if (p > maxVal || c > maxVal || m > maxVal) { alert(`Scores cannot exceed ${maxVal}.`); return; }
+                scoreObj.physics = p; scoreObj.chemistry = c; scoreObj.mathematics = m;
+            } else {
+                const p = parseInt(document.getElementById('score-sub-physics').value) || 0;
+                const c = parseInt(document.getElementById('score-sub-chemistry').value) || 0;
+                const b = parseInt(document.getElementById('score-sub-botany').value) || 0;
+                const z = parseInt(document.getElementById('score-sub-zoology').value) || 0;
+                if (p > maxVal || c > maxVal || b > maxVal || z > maxVal) { alert(`Scores cannot exceed ${maxVal}.`); return; }
+                scoreObj.physics = p; scoreObj.chemistry = c; scoreObj.botany = b; scoreObj.zoology = z;
+            }
+
+            state.tests.push(scoreObj);
+            await saveStateToCloud(); 
+            renderTable(); 
+            updateChartsData();
+            configureScoreInputsLayout(); 
+        });
+
+        document.getElementById('next-formula-btn').addEventListener('click', () => { rotateFormula(); });
+
+        function renderTodos() {
+            const ul = document.getElementById('todo-list');
+            if(!ul) return; ul.innerHTML = '';
+            state.todos.forEach((todo, idx) => {
+                const li = document.createElement('li');
+                const timeStr = todo.timeLimit ? ` (${todo.timeLimit}m)` : '';
+                
+                const taskContainer = document.createElement('div');
+                taskContainer.innerHTML = `<span>${todo.text}${timeStr}</span>`;
+                
+                const controlContainer = document.createElement('div');
+                
+                if (todo.timeLimit) {
+                    const loadBtn = document.createElement('button');
+                    loadBtn.className = 'badge-clock-btn';
+                    loadBtn.innerHTML = `<i class="fa-solid fa-clock"></i> Load`;
+                    loadBtn.addEventListener('click', () => loadTaskToClock(idx));
+                    controlContainer.appendChild(loadBtn);
+                }
+                
+                const checkBtn = document.createElement('button');
+                checkBtn.className = 'delete-btn';
+                checkBtn.style.background = 'rgba(255,255,255,0.25)';
+                checkBtn.innerHTML = `<i class="fa-solid fa-check"></i>`;
+                checkBtn.addEventListener('click', async () => {
+                    state.todos.splice(idx, 1);
+                    state.streak = (state.streak || 0) + 1;
+                    await saveStateToCloud(); 
+                    renderTodos(); 
+                    updateStreakUI();
+                });
+                
+                controlContainer.appendChild(checkBtn);
+                li.appendChild(taskContainer);
+                li.appendChild(controlContainer);
+                ul.appendChild(li);
+            });
+        }
+
+        function renderChapters() {
+            const ul = document.getElementById('task-list');
+            if(!ul) return; ul.innerHTML = '';
+            state.chapters.forEach((ch, idx) => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span><strong>[${ch.subject}]</strong> ${ch.title}</span>`;
+                
+                const delBtn = document.createElement('button');
+                delBtn.className = 'delete-btn';
+                delBtn.style.background = 'rgba(255,255,255,0.25)';
+                delBtn.innerHTML = `<i class="fa-solid fa-check"></i>`;
+                delBtn.addEventListener('click', async () => {
+                    state.chapters.splice(idx, 1); 
+                    await saveStateToCloud(); 
+                    renderChapters();
+                });
+                
+                li.appendChild(delBtn);
+                ul.appendChild(li);
+            });
+        }
+
+        function renderStrategicPlan() {
+            const targetBox = document.getElementById('planner-output-card');
+            if(!state.activeStrategicPlan) { targetBox.style.display = 'none'; return; }
+            targetBox.style.display = 'block';
+            const plan = state.activeStrategicPlan;
+            targetBox.innerHTML = `
+                <div style="display:flex; justify-content:between; align-items:center; margin-bottom: 8px;">
+                    <strong style="color:#1e3a8a;">🎯 Strategy: ${plan.title}</strong>
+                    <i class="fa-solid fa-square-xmark" id="clear-plan-cross" style="cursor:pointer; color:#ef4444; margin-left:auto; font-size:1.15rem;"></i>
+                </div>
+                <p style="font-weight:bold; margin-bottom:5px;">⏳ ${plan.diffDays} Days Remaining for ${plan.count} Selected Topics</p>
+                <div class="phase-box" style="border-left-color: #2563eb;">
+                    <strong>Phase 1: Deep Core Study (${plan.p1Days} Days)</strong><br>
+                    Load: ~${(plan.count / plan.p1Days).toFixed(1)} chapters/day.
+                </div>
+                <div class="phase-box" style="border-left-color: #eab308;">
+                    <strong>Phase 2: High Yield Review (${plan.p2Days} Days)</strong><br>
+                    Speed run through formulas.
+                </div>
+                <div class="phase-box" style="border-left-color: #dc2626;">
+                    <strong>Phase 3: Grand Mock Drills (${plan.p3Days} Days)</strong><br>
+                    Time-bound papers and error logs.
+                </div>
+            `;
+            
+            document.getElementById('clear-plan-cross').addEventListener('click', async () => {
+                state.activeStrategicPlan = null; 
+                await saveStateToCloud(); 
+                renderStrategicPlan();
+            });
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('score-table-body');
+            if (!tbody || !activeUserMeta) return; tbody.innerHTML = '';
+            state.tests.forEach((t, idx) => {
+                const row = document.createElement('tr');
+                let breakDownStr = activeUserMeta.targetExam === "JEE" ? 
+                    `P:${t.physics} C:${t.chemistry} M:${t.mathematics}` : 
+                    `P:${t.physics} C:${t.chemistry}<br>B:${t.botany} Z:${t.zoology}`;
+                
+                let maxPossible = activeUserMeta.targetExam === "JEE" ? 300 : 720;
+                let sumScore = activeUserMeta.targetExam === "JEE" ? 
+                    (t.physics + t.chemistry + t.mathematics) : 
+                    (t.physics + t.chemistry + t.botany + t.zoology);
+
+                row.innerHTML = `
+                    <td><strong>${t.date}</strong><br><small style="color:#64748b;">${t.name}</small></td>
+                    <td>${breakDownStr}</td>
+                    <td><strong>${sumScore}</strong>/${maxPossible}</td>
+                `;
+                
+                const actionsTd = document.createElement('td');
+                const delBtn = document.createElement('button');
+                delBtn.className = 'delete-btn';
+                delBtn.innerHTML = `<i class="fa-solid fa-trash"></i>`;
+                delBtn.addEventListener('click', async () => {
+                    state.tests.splice(idx, 1); 
+                    await saveStateToCloud(); 
+                    renderTable(); 
+                    updateChartsData();
+                });
+                
+                actionsTd.appendChild(delBtn);
+                row.appendChild(actionsTd);
+                tbody.appendChild(row);
+            });
+        }
+
+        let performanceChart = null, pieChart = null;
+        function initCharts() {
+            const maxRange = activeUserMeta && activeUserMeta.targetExam === "JEE" ? 100 : 180;
+            const ctxLine = document.getElementById('performanceChart').getContext('2d');
+            if(performanceChart) performanceChart.destroy();
+            performanceChart = new Chart(ctxLine, {
+                type: 'line',
+                data: { labels: [], datasets: [] },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: maxRange } } }
+            });
+
+            const ctxPie = document.getElementById('pieChart').getContext('2d');
+            if(pieChart) pieChart.destroy();
+            const pieLabels = activeUserMeta && activeUserMeta.targetExam === "JEE" ? ['Physics', 'Chemistry', 'Mathematics'] : ['Physics', 'Chemistry', 'Botany', 'Zoology'];
+            const pieColors = activeUserMeta && activeUserMeta.targetExam === "JEE" ? ['#3b82f6', '#eab308', '#a855f7'] : ['#3b82f6', '#eab308', '#10b981', '#ec4899'];
+            
+            pieChart = new Chart(ctxPie, {
+                type: 'pie',
+                data: { labels: pieLabels, datasets: [{ data: pieLabels.map(()=>0), backgroundColor: pieColors }] },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        function updateChartsData() {
+            if (!performanceChart || !pieChart || !activeUserMeta || !state.tests) return;
+            const labels = state.tests.map(t => t.date);
+            performanceChart.data.labels = labels;
+
+            let datasets = [];
+            if(activeUserMeta.targetExam === "JEE") {
+                datasets = [
+                    { label: 'Physics', data: state.tests.map(t => t.physics), borderColor: '#3b82f6', fill: false, tension: 0.2 },
+                    { label: 'Chemistry', data: state.tests.map(t => t.chemistry), borderColor: '#eab308', fill: false, tension: 0.2 },
+                    { label: 'Mathematics', data: state.tests.map(t => t.mathematics), borderColor: '#a855f7', fill: false, tension: 0.2 }
+                ];
+                performanceChart.data.datasets = datasets;
+                performanceChart.update();
+
+                let tP = 0, tC = 0, tM = 0;
+                state.tests.forEach(t => { tP += t.physics; tC += t.chemistry; tM += t.mathematics; });
+                pieChart.data.datasets[0].data = [tP, tC, tM];
+                pieChart.update();
+            } else {
+                datasets = [
+                    { label: 'Physics', data: state.tests.map(t => t.physics), borderColor: '#3b82f6', fill: false, tension: 0.2 },
+                    { label: 'Chemistry', data: state.tests.map(t => t.chemistry), borderColor: '#eab308', fill: false, tension: 0.2 },
+                    { label: 'Botany', data: state.tests.map(t => t.botany), borderColor: '#10b981', fill: false, tension: 0.2 },
+                    { label: 'Zoology', data: state.tests.map(t => t.zoology), borderColor: '#ec4899', fill: false, tension: 0.2 }
+                ];
+                performanceChart.data.datasets = datasets;
+                performanceChart.update();
+
+                let tP = 0, tC = 0, tB = 0, tZ = 0;
+                state.tests.forEach(t => { tP += t.physics; tC += t.chemistry; tB += t.botany; tZ += t.zoology; });
+                pieChart.data.datasets[0].data = [tP, tC, tB, tZ];
+                pieChart.update();
+            }
+        }
+
+        function initAppLifecycle() {
+            renderTodos();
+            renderChapters();
+            initCharts();
+            renderTable();
+            updateChartsData();
+            rotateFormula();
+            renderStrategicPlan();
+        }
+
+        // CLOCK PIPELINE MECHANICS
+        let clockInterval, running = false, totalSeconds = 0, isCountdownMode = false;
+        
+        document.getElementById('launch-clock-box').addEventListener('click', () => {
+            document.getElementById('clock-overlay').style.display = 'flex';
+        });
+        
+        document.getElementById('exit-clock-btn').addEventListener('click', () => {
+            document.getElementById('clock-overlay').style.display = 'none';
+        });
+
+        function loadTaskToClock(idx) {
+            const task = state.todos[idx];
+            if(task && task.timeLimit) {
+                isCountdownMode = true; totalSeconds = task.timeLimit * 60;
+                document.getElementById('clock-status-text').innerText = `Target: ${task.text} (${task.timeLimit} mins)`;
+                document.getElementById('clock-overlay-title').innerHTML = `<i class="fa-solid fa-bullseye"></i> TARGET: ${task.text.toUpperCase()}`;
+                updateFlipDisplay(); 
+                document.getElementById('clock-overlay').style.display = 'flex';
+            }
+        }
+
+        document.getElementById('start-pause-btn').addEventListener('click', () => {
+            const btn = document.getElementById('start-pause-btn');
+            if (!running) {
+                running = true; btn.innerText = "Pause Study"; btn.style.backgroundColor = "#eab308";
+                clockInterval = setInterval(() => { 
+                    if(isCountdownMode) {
+                        if(totalSeconds > 0) { totalSeconds--; }
+                        else {
+                            clearInterval(clockInterval); running = false;
+                            alert("Time Target Achieved!"); resetClock(); return;
+                        }
+                    } else { totalSeconds++; }
+                    updateFlipDisplay(); 
+                }, 1000);
+            } else {
+                running = false; btn.innerText = "Resume Study"; btn.style.backgroundColor = "#22c55e";
+                clearInterval(clockInterval);
+            }
+        });
+
+        function resetClock() {
+            running = false; clearInterval(clockInterval); totalSeconds = 0; isCountdownMode = false;
+            updateFlipDisplay();
+            document.getElementById('clock-status-text').innerText = `Mode: Free Flow Stopwatch`;
+            document.getElementById('clock-overlay-title').innerHTML = `<i class="fa-solid fa-brain"></i> DEEP STUDY STREAM`;
+            const btn = document.getElementById('start-pause-btn');
+            btn.innerText = "Start Session"; btn.style.backgroundColor = "#22c55e";
+        }
+
+        document.getElementById('reset-clock-btn').addEventListener('click', resetClock);
+
+        function updateFlipDisplay() {
+            document.getElementById('flip-hr').innerText = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+            document.getElementById('flip-min').innerText = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+            document.getElementById('flip-sec').innerText = String(totalSeconds % 60).padStart(2, '0');
+        }
+
+        const formulas = [
+            "Physics: De Broglie Wavelength: λ = h / p = h / √(2mK)",
+            "Chemistry: Ideal Gas Law Equation: PV = nRT",
+            "Mathematics: Euler's Identity Formula: e^(iπ) + 1 = 0",
+            "NEET Target Point: GFR Rate in dynamic individual: ~125 mL/min"
+        ];
+        
+        function rotateFormula() {
+            const randomIdx = Math.floor(Math.random() * formulas.length);
+            document.getElementById('formula-text').innerText = formulas[randomIdx];
+        }
+    </script>
+</body>
+</html>
