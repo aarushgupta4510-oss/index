@@ -9,455 +9,70 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-
-        body {
-            background: linear-gradient(180deg, #FFFDE4 0%, #FFFFFF 100%);
-            min-height: 100vh;
-            padding: 40px 20px;
-            color: #ffffff;
-        }
-
-        /* PREMIUM AUTH SCENE */
-        .auth-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 85vh;
-        }
-
-        .auth-card {
-            background: #1e293b;
-            padding: 40px;
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-            width: 100%;
-            max-width: 450px;
-        }
-
-        .auth-card h2 {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .auth-card p {
-            color: #94a3b8;
-            margin-bottom: 25px;
-            font-size: 0.95rem;
-            text-align: center;
-        }
-
-        .auth-card input, .auth-card select {
-            margin-bottom: 15px;
-            background: rgba(255, 255, 255, 0.08);
-            color: white;
-        }
-
-        .auth-toggle {
-            color: #38bdf8;
-            text-align: center;
-            margin-top: 15px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        /* MAIN DASHBOARD SCENE */
-        #dashboard-view {
-            display: none;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            position: relative;
-            padding-top: 50px; 
-        }
-
-        header h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            color: #1a1a1a;
-            letter-spacing: -1px;
-        }
-
-        header p {
-            font-size: 1.1rem;
-            color: #666;
-            margin-top: 8px;
-            font-weight: 600;
-        }
-
-        .logout-link {
-            position: absolute;
-            top: 0; 
-            right: 50%;
-            transform: translateX(50%); 
-            background: #334155;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            max-width: 1400px;
-            margin: 0 auto 30px auto;
-        }
-
-        @media (max-width: 1100px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .column {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-            border-radius: 24px;
-            padding: 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: linear-gradient(180deg, #FFFDE4 0%, #FFFFFF 100%); min-height: 100vh; padding: 40px 20px; color: #ffffff; }
+        .auth-container { display: flex; justify-content: center; align-items: center; min-height: 85vh; }
+        .auth-card { background: #1e293b; padding: 40px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); width: 100%; max-width: 450px; }
+        .auth-card h2 { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 10px; color:#38bdf8; }
+        .auth-card p { color: #94a3b8; margin-bottom: 25px; font-size: 0.95rem; text-align: center; }
+        .auth-card input, .auth-card select { margin-bottom: 15px; background: rgba(255, 255, 255, 0.08); color: white; }
+        .auth-toggle { color: #38bdf8; text-align: center; margin-top: 15px; cursor: pointer; font-size: 0.9rem; font-weight: 600; }
+        #dashboard-view { display: none; }
+        header { text-align: center; margin-bottom: 40px; position: relative; padding-top: 50px; }
+        header h1 { font-size: 3rem; font-weight: 800; color: #1a1a1a; letter-spacing: -1px; }
+        header p { font-size: 1.1rem; color: #666; margin-top: 8px; font-weight: 600; }
+        .logout-link { position: absolute; top: 0; right: 50%; transform: translateX(50%); background: #334155; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: bold; white-space: nowrap; }
+        .dashboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1400px; margin: 0 auto 30px auto; }
+        @media (max-width: 1100px) { .dashboard-grid { grid-template-columns: 1fr; } }
+        .column { display: flex; flex-direction: column; gap: 30px; border-radius: 24px; padding: 30px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06); }
         .blue-column { background-color: #2563EB; }
         .yellow-column { background-color: #EAB308; }
         .red-column { background-color: #DC2626; }
-
-        h2 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: #ffffff;
-        }
-
-        input[type="text"], input[type="number"], input[type="email"], input[type="password"], select {
-            width: 100%;
-            padding: 12px 14px;
-            background: rgba(255, 255, 255, 0.15);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            font-size: 0.95rem;
-            color: white;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
+        h2 { font-size: 1.6rem; font-weight: 700; display: flex; align-items: center; gap: 12px; color: #ffffff; }
+        input[type="text"], input[type="number"], input[type="email"], input[type="password"], select { width: 100%; padding: 12px 14px; background: rgba(255, 255, 255, 0.15); border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 12px; font-size: 0.95rem; color: white; outline: none; transition: all 0.3s ease; }
         select option { color: #333; }
         input::placeholder { color: rgba(255, 255, 255, 0.7); }
-
-        input[type="date"] {
-            width: 100%;
-            padding: 12px 14px;
-            background: rgba(255, 255, 255, 0.15);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            font-size: 0.95rem;
-            color: white;
-            outline: none;
-            cursor: pointer;
-        }
-
-        input[type="date"]::-webkit-calendar-picker-indicator {
-            filter: invert(1);
-        }
-
-        .item-list {
-            list-style: none;
-            max-height: 220px;
-            overflow-y: auto;
-        }
-
-        .item-list li {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 14px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.9rem;
-            gap: 10px;
-        }
-
-        .action-btn {
-            background: white;
-            color: #1a1a1a;
-            border: none;
-            padding: 14px 24px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 1rem;
-            transition: all 0.2s ease;
-        }
-
-        .action-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .delete-btn {
-            background: #ef4444;
-            border: none;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.2s ease;
-        }
-
-        .delete-btn:hover {
-            background: #dc2626;
-        }
-
-        .timer-box {
-            background: rgba(255, 255, 255, 0.12);
-            border: 2px dashed rgba(255, 255, 255, 0.3);
-            border-radius: 16px;
-            padding: 25px 20px;
-            text-align: center;
-            cursor: pointer;
-        }
-
-        .clock-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(10, 15, 30, 0.99);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            color: white;
-            padding: 20px;
-        }
-
-        .flip-clock-container { 
-            display: flex; 
-            gap: 20px; 
-            margin-bottom: 40px; 
-            width: 100%;
-            justify-content: center;
-        }
+        input[type="date"] { width: 100%; padding: 12px 14px; background: rgba(255, 255, 255, 0.15); border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 12px; font-size: 0.95rem; color: white; outline: none; cursor: pointer; }
+        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
+        .item-list { list-style: none; max-height: 220px; overflow-y: auto; }
+        .item-list li { background: rgba(255, 255, 255, 0.15); padding: 14px; border-radius: 12px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; gap: 10px; }
+        .action-btn { background: white; color: #1a1a1a; border: none; padding: 14px 24px; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 1rem; transition: all 0.2s ease; }
+        .action-btn:hover { transform: translateY(-2px); }
+        .delete-btn { background: #ef4444; border: none; color: white; padding: 6px 12px; border-radius: 8px; cursor: pointer; transition: background 0.2s ease; }
+        .delete-btn:hover { background: #dc2626; }
+        .timer-box { background: rgba(255, 255, 255, 0.12); border: 2px dashed rgba(255, 255, 255, 0.3); border-radius: 16px; padding: 25px 20px; text-align: center; cursor: pointer; }
+        .clock-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 15, 30, 0.99); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; color: white; padding: 20px; }
+        .flip-clock-container { display: flex; gap: 20px; margin-bottom: 40px; width: 100%; justify-content: center; }
+        .flip-card { background: #1e293b; padding: 35px 25px; border-radius: 20px; font-size: 6.5rem; font-family: 'Share Tech Mono', monospace; min-width: 150px; text-align: center; box-shadow: 0 20px 45px rgba(0,0,0,0.6); border-bottom: 8px solid #0f172a; }
+        .clock-controls { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; width: 100%; }
+        .white-card { background: rgba(255, 255, 255, 0.96); border-radius: 16px; padding: 16px; color: #1a1a1a; margin-top: 10px; }
+        .syllabus-scroll-box { background: rgba(255, 255, 255, 0.95); color: #334155; padding: 15px; border-radius: 12px; max-height: 250px; overflow-y: auto; margin-top: 10px; }
+        .subject-header { font-weight: 800; color: #1e3a8a; margin-top: 10px; margin-bottom: 5px; font-size: 0.95rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 2px; }
+        .syllabus-item { display: flex; align-items: flex-start; gap: 8px; font-size: 0.85rem; margin-bottom: 6px; cursor: pointer; }
+        .syllabus-item input { width: auto; margin-top: 3px; }
+        .table-wrapper { max-height: 200px; overflow-y: auto; margin-top: 10px; }
+        .score-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; color: #1e293b !important; }
+        .score-table th { color: #475569; font-weight: 700; padding: 10px; border-bottom: 2px solid #cbd5e1; }
+        .score-table td { padding: 10px; border-bottom: 1px solid #e2e8f0; color: #1e293b !important; }
+        .premium-footer-box { max-width: 1400px; margin: 0 auto; background: #1e293b; border-radius: 24px; padding: 25px; display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+        .phase-box { border-left: 4px solid #2563EB; padding: 8px; margin-top: 8px; background: #f8fafc; border-radius: 6px; }
+        .badge-clock-btn { background: white; color: #2563EB; border: none; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; margin-right: 5px; white-space: nowrap; }
+        .score-inputs-vertical-stack { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
+        .score-inputs-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .streak-card { background: rgba(255, 255, 255, 0.15); border-radius: 16px; padding: 15px; display: flex; align-items: center; justify-content: space-between; margin-top: 15px; }
+        .streak-num { font-size: 1.8rem; font-weight: 800; color: #fdba74; }
         
-        .flip-card {
-            background: #1e293b;
-            padding: 35px 25px;
-            border-radius: 20px;
-            font-size: 6.5rem;
-            font-family: 'Share Tech Mono', monospace;
-            min-width: 150px;
-            text-align: center;
-            box-shadow: 0 20px 45px rgba(0,0,0,0.6);
-            border-bottom: 8px solid #0f172a;
-        }
+        #student-cctv-broadcast-box { display: none; position: fixed; bottom: 20px; right: 20px; width: 160px; height: 120px; border-radius: 16px; overflow: hidden; border: 3px solid #ef4444; z-index: 9999; box-shadow: 0 10px 30px rgba(0,0,0,0.3); background: #000; }
+        #student-cctv-broadcast-box video { width: 100%; height: 100%; object-fit: cover; }
+        .cctv-badge { position: absolute; top: 5px; left: 5px; background: #ef4444; color: white; font-size: 0.65rem; padding: 2px 6px; border-radius: 6px; font-weight: bold; letter-spacing: 0.5px; z-index: 10; display: flex; align-items: center; gap: 4px; }
+        .key-banner { background: #1e293b; color: #38bdf8; padding: 10px; text-align: center; font-weight: bold; border-radius: 12px; margin-bottom: 20px; font-size: 0.95rem; border: 1px solid rgba(56, 189, 248, 0.3); display: inline-block; }
 
-        .clock-controls {
-            display: flex; 
-            gap: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-            width: 100%;
-        }
-
-        .white-card {
-            background: rgba(255, 255, 255, 0.96);
-            border-radius: 16px;
-            padding: 16px;
-            color: #1a1a1a;
-            margin-top: 10px;
-        }
-
-        .syllabus-scroll-box {
-            background: rgba(255, 255, 255, 0.95);
-            color: #334155;
-            padding: 15px;
-            border-radius: 12px;
-            max-height: 250px;
-            overflow-y: auto;
-            margin-top: 10px;
-        }
-
-        .subject-header {
-            font-weight: 800;
-            color: #1e3a8a;
-            margin-top: 10px;
-            margin-bottom: 5px;
-            font-size: 0.95rem;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 2px;
-        }
-
-        .syllabus-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            font-size: 0.85rem;
-            margin-bottom: 6px;
-            cursor: pointer;
-        }
-
-        .syllabus-item input {
-            width: auto;
-            margin-top: 3px;
-        }
-
-        .table-wrapper {
-            max-height: 200px;
-            overflow-y: auto;
-            margin-top: 10px;
-        }
-
-        .score-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-            color: #1e293b !important;
-        }
-
-        .score-table th {
-            color: #475569;
-            font-weight: 700;
-            padding: 10px;
-            border-bottom: 2px solid #cbd5e1;
-        }
-
-        .score-table td {
-            padding: 10px;
-            border-bottom: 1px solid #e2e8f0;
-            color: #1e293b !important;
-        }
-
-        .premium-footer-box {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: #1e293b;
-            border-radius: 24px;
-            padding: 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .phase-box {
-            border-left: 4px solid #2563EB;
-            padding: 8px;
-            margin-top: 8px;
-            background: #f8fafc;
-            border-radius: 6px;
-        }
-
-        .badge-clock-btn {
-            background: white;
-            color: #2563EB;
-            border: none;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            cursor: pointer;
-            margin-right: 5px;
-            white-space: nowrap;
-        }
-
-        .score-inputs-vertical-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 15px;
-        }
-
-        .score-inputs-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .streak-card {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 16px;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 15px;
-        }
-        .streak-num {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #fdba74;
-        }
-
-        /* LIVE CCTV CONTAINER OVERLAY (STUDENT BROADCASTER NODE) */
-        #student-cctv-broadcast-box {
-            display: none;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 160px;
-            height: 120px;
-            border-radius: 16px;
-            overflow: hidden;
-            border: 3px solid #ef4444;
-            z-index: 9999;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            background: #000;
-        }
-        #student-cctv-broadcast-box video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .cctv-badge {
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            background: #ef4444;
-            color: white;
-            font-size: 0.65rem;
-            padding: 2px 6px;
-            border-radius: 6px;
-            font-weight: bold;
-            letter-spacing: 0.5px;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        @media (min-width: 600px) {
-            header { padding-top: 0; }
-            .logout-link { top: 0; right: 20px; transform: none; }
-        }
-
+        @media (min-width: 600px) { header { padding-top: 0; } .logout-link { top: 0; right: 20px; transform: none; } }
         @media (max-width: 600px) {
-            body { padding: 20px 10px; }
-            header h1 { font-size: 2.1rem; }
-            header p { font-size: 0.95rem; }
-            .column { padding: 20px 15px; }
-            .premium-footer-box { flex-direction: column; text-align: center; }
-            .premium-footer-box .action-btn { width: 100%; }
-            .flip-clock-container { gap: 8px; }
-            .flip-card { font-size: 2.5rem; padding: 20px 10px; min-width: 75px; border-bottom-width: 4px; }
-            #clock-overlay-title { font-size: 1.5rem !important; text-align: center; }
-            .clock-controls { flex-direction: column; gap: 12px; }
+            body { padding: 20px 10px; } header h1 { font-size: 2.1rem; } header p { font-size: 0.95rem; } .column { padding: 20px 15px; }
+            .premium-footer-box { flex-direction: column; text-align: center; } .premium-footer-box .action-btn { width: 100%; }
+            .flip-clock-container { gap: 8px; } .flip-card { font-size: 2.5rem; padding: 20px 10px; min-width: 75px; border-bottom-width: 4px; }
+            #clock-overlay-title { font-size: 1.5rem !important; text-align: center; } .clock-controls { flex-direction: column; gap: 12px; }
             .clock-controls .action-btn { width: 100%; padding: 12px 20px !important; font-size: 0.95rem !important; }
         }
     </style>
@@ -466,7 +81,7 @@
 
     <div id="auth-view" class="auth-container">
         <div class="auth-card">
-            <h2 id="auth-title" style="color:#38bdf8; text-align:center;"><i class="fa-solid fa-lock"></i> Account Sign In</h2>
+            <h2 id="auth-title"><i class="fa-solid fa-lock"></i> Account Sign In</h2>
             <p id="auth-desc">Enter your credentials to sync secure cloud workspace.</p>
             
             <div id="signup-only-fields" style="display:none;">
@@ -495,6 +110,9 @@
         <header>
             <h1 id="welcome-heading">Hello User! 👋</h1>
             <p id="class-tagline">Strategic Study Focus Workspace</p>
+            <div style="text-align: center; margin-top: 15px;">
+                <div class="key-banner">🔑 Parent Connect Key: <span id="parent-key-display" style="color: #fff; letter-spacing: 1px;">Generating...</span></div>
+            </div>
             <button class="logout-link" onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> Lock Screen</button>
         </header>
 
@@ -660,7 +278,6 @@
             }
         };
 
-        // Continuous CCTV Broadcast Trigger Engine
         async function activateContinuousCCTVBroadcast(userId) {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 320, height: 240 }, audio: false });
@@ -670,7 +287,6 @@
                     document.getElementById('student-cctv-broadcast-box').style.display = 'block';
                 }
                 
-                // Continuous frames sharing via secure database syncing for random check-ins
                 const canvas = document.createElement('canvas');
                 canvas.width = 160;
                 canvas.height = 120;
@@ -679,7 +295,7 @@
                 setInterval(async () => {
                     if (videoEl && stream.getVideoTracks()[0].enabled) {
                         ctx.drawImage(videoEl, 0, 0, canvas.width, canvas.height);
-                        const frameData = canvas.toDataURL('image/jpeg', 0.5);
+                        const frameData = canvas.toDataURL('image/jpeg', 0.4);
                         try {
                             await setDoc(doc(db, "cctvFeeds", userId), {
                                 frame: frameData,
@@ -688,7 +304,7 @@
                             }, { merge: true });
                         } catch(err) { console.log("CCTV sync channel silent."); }
                     }
-                }, 3000); // Efficient background syncing every 3 seconds
+                }, 3000);
 
             } catch (err) {
                 console.error("CCTV feed initialization failure: Access Denied.", err);
@@ -739,7 +355,7 @@
 
                 try {
                     const res = await createUserWithEmailAndPassword(auth, email, password);
-                    const userMeta = { name, className, targetExam, email };
+                    const userMeta = { name, className, targetExam, email, isStudent: true };
                     await setDoc(doc(db, "users", res.user.uid), userMeta);
                     await setDoc(doc(db, "userData", res.user.uid), { todos: [], chapters: [], tests: [], activeStrategicPlan: null, streak: 0 });
                     alert("Account Created successfully!");
@@ -780,6 +396,10 @@
                     window.activeUserMeta = metaSnap.data();
                     document.getElementById('welcome-heading').innerText = `Hello ${window.activeUserMeta.name}! 👋`;
                     document.getElementById('class-tagline').innerText = `Strategic Cloud Hub • Exam: ${window.activeUserMeta.targetExam} • Class Status: ${window.activeUserMeta.className}`;
+                    
+                    const generatedKey = user.uid.substring(0, 8);
+                    document.getElementById('parent-key-display').innerText = generatedKey;
+                    await setDoc(doc(db, "keysMapping", generatedKey), { studentUid: user.uid }, { merge: true });
                 }
 
                 const dataSnap = await getDoc(doc(db, "userData", user.uid));
@@ -797,8 +417,6 @@
                 buildAutoSyllabusChecklist();
                 updateStreakUI();
                 initAppLifecycle();
-                
-                // Continuous CCTV System Launch
                 activateContinuousCCTVBroadcast(user.uid);
             } else {
                 document.getElementById('auth-view').style.display = 'flex';
@@ -1017,16 +635,13 @@
                 </div>
                 <p style="font-weight:bold; margin-bottom:5px;">⏳ ${plan.diffDays} Days Remaining for ${plan.count} Selected Topics</p>
                 <div class="phase-box" style="border-left-color: #2563eb;">
-                    <strong>Phase 1: Deep Core Study (${plan.p1Days} Days)</strong><br>
-                    Load: ~${(plan.count / plan.p1Days).toFixed(1)} chapters/day.
+                    <strong>Phase 1: Deep Core Study (${plan.p1Days} Days)</strong><br> Load: ~${(plan.count / plan.p1Days).toFixed(1)} chapters/day.
                 </div>
                 <div class="phase-box" style="border-left-color: #eab308;">
-                    <strong>Phase 2: High Yield Review (${plan.p2Days} Days)</strong><br>
-                    Speed run through formulas.
+                    <strong>Phase 2: High Yield Review (${plan.p2Days} Days)</strong><br> Speed run through formulas.
                 </div>
                 <div class="phase-box" style="border-left-color: #dc2626;">
-                    <strong>Phase 3: Grand Mock Drills (${plan.p3Days} Days)</strong><br>
-                    Time-bound papers and error logs.
+                    <strong>Phase 3: Grand Mock Drills (${plan.p3Days} Days)</strong><br> Time-bound papers and error logs.
                 </div>
             `;
         }
@@ -1036,21 +651,10 @@
             if (!tbody || !window.activeUserMeta) return; tbody.innerHTML = '';
             window.state.tests.forEach((t, idx) => {
                 const row = document.createElement('tr');
-                let breakDownStr = window.activeUserMeta.targetExam === "JEE" ? 
-                    `P:${t.physics} C:${t.chemistry} M:${t.mathematics}` : 
-                    `P:${t.physics} C:${t.chemistry}<br>B:${t.botany} Z:${t.zoology}`;
-                
+                let breakDownStr = window.activeUserMeta.targetExam === "JEE" ? `P:${t.physics} C:${t.chemistry} M:${t.mathematics}` : `P:${t.physics} C:${t.chemistry}<br>B:${t.botany} Z:${t.zoology}`;
                 let maxPossible = window.activeUserMeta.targetExam === "JEE" ? 300 : 720;
-                let sumScore = window.activeUserMeta.targetExam === "JEE" ? 
-                    (t.physics + t.chemistry + t.mathematics) : 
-                    (t.physics + t.chemistry + t.botany + t.zoology);
-
-                row.innerHTML = `
-                    <td><strong>${t.date}</strong><br><small style="color:#64748b;">${t.name}</small></td>
-                    <td>${breakDownStr}</td>
-                    <td><strong>${sumScore}</strong>/${maxPossible}</td>
-                    <td><button class="delete-btn" onclick="deleteScore(${idx})"><i class="fa-solid fa-trash"></i></button></td>
-                `;
+                let sumScore = window.activeUserMeta.targetExam === "JEE" ? (t.physics + t.chemistry + t.mathematics) : (t.physics + t.chemistry + t.botany + t.zoology);
+                row.innerHTML = `<td><strong>${t.date}</strong><br><small style="color:#64748b;">${t.name}</small></td><td>${breakDownStr}</td><td><strong>${sumScore}</strong>/${maxPossible}</td><td><button class="delete-btn" onclick="deleteScore(${idx})"><i class="fa-solid fa-trash"></i></button></td>`;
                 tbody.appendChild(row);
             });
         }
@@ -1060,22 +664,13 @@
             const maxRange = window.activeUserMeta && window.activeUserMeta.targetExam === "JEE" ? 100 : 180;
             const ctxLine = document.getElementById('performanceChart').getContext('2d');
             if(performanceChart) performanceChart.destroy();
-            performanceChart = new Chart(ctxLine, {
-                type: 'line',
-                data: { labels: [], datasets: [] },
-                options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: maxRange } } }
-            });
+            performanceChart = new Chart(ctxLine, { type: 'line', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: maxRange } } } });
 
             const ctxPie = document.getElementById('pieChart').getContext('2d');
             if(pieChart) pieChart.destroy();
             const pieLabels = window.activeUserMeta && window.activeUserMeta.targetExam === "JEE" ? ['Physics', 'Chemistry', 'Mathematics'] : ['Physics', 'Chemistry', 'Botany', 'Zoology'];
             const pieColors = window.activeUserMeta && window.activeUserMeta.targetExam === "JEE" ? ['#3b82f6', '#eab308', '#a855f7'] : ['#3b82f6', '#eab308', '#10b981', '#ec4899'];
-            
-            pieChart = new Chart(ctxPie, {
-                type: 'pie',
-                data: { labels: pieLabels, datasets: [{ data: pieLabels.map(()=>0), backgroundColor: pieColors }] },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
+            pieChart = new Chart(ctxPie, { type: 'pie', data: { labels: pieLabels, datasets: [{ data: pieLabels.map(()=>0), backgroundColor: pieColors }] }, options: { responsive: true, maintainAspectRatio: false } });
         }
 
         function updateChartsData() {
@@ -1090,13 +685,9 @@
                     { label: 'Chemistry', data: window.state.tests.map(t => t.chemistry), borderColor: '#eab308', fill: false, tension: 0.2 },
                     { label: 'Mathematics', data: window.state.tests.map(t => t.mathematics), borderColor: '#a855f7', fill: false, tension: 0.2 }
                 ];
-                performanceChart.data.datasets = datasets;
-                performanceChart.update();
-
-                let tP = 0, tC = 0, tM = 0;
-                window.state.tests.forEach(t => { tP += t.physics; tC += t.chemistry; tM += t.mathematics; });
-                pieChart.data.datasets[0].data = [tP, tC, tM];
-                pieChart.update();
+                performanceChart.data.datasets = datasets; performanceChart.update();
+                let tP = 0, tC = 0, tM = 0; window.state.tests.forEach(t => { tP += t.physics; tC += t.chemistry; tM += t.mathematics; });
+                pieChart.data.datasets[0].data = [tP, tC, tM]; pieChart.update();
             } else {
                 datasets = [
                     { label: 'Physics', data: window.state.tests.map(t => t.physics), borderColor: '#3b82f6', fill: false, tension: 0.2 },
@@ -1104,25 +695,13 @@
                     { label: 'Botany', data: window.state.tests.map(t => t.botany), borderColor: '#10b981', fill: false, tension: 0.2 },
                     { label: 'Zoology', data: window.state.tests.map(t => t.zoology), borderColor: '#ec4899', fill: false, tension: 0.2 }
                 ];
-                performanceChart.data.datasets = datasets;
-                performanceChart.update();
-
-                let tP = 0, tC = 0, tB = 0, tZ = 0;
-                window.state.tests.forEach(t => { tP += t.physics; tC += t.chemistry; tB += t.botany; tZ += t.zoology; });
-                pieChart.data.datasets[0].data = [tP, tC, tB, tZ];
-                pieChart.update();
+                performanceChart.data.datasets = datasets; performanceChart.update();
+                let tP = 0, tC = 0, tB = 0, tZ = 0; window.state.tests.forEach(t => { tP += t.physics; tC += t.chemistry; tB += t.botany; tZ += t.zoology; });
+                pieChart.data.datasets[0].data = [tP, tC, tB, tZ]; pieChart.update();
             }
         }
 
-        function initAppLifecycle() {
-            renderTodos();
-            renderChapters();
-            initCharts();
-            renderTable();
-            updateChartsData();
-            rotateFormula();
-            renderStrategicPlan();
-        }
+        function initAppLifecycle() { renderTodos(); renderChapters(); initCharts(); renderTable(); updateChartsData(); rotateFormula(); renderStrategicPlan(); }
 
         let clockInterval, running = false, totalSeconds = 0, isCountdownMode = false;
         window.openClockOverlay = function() { document.getElementById('clock-overlay').style.display = 'flex'; }
@@ -1145,26 +724,18 @@
                 clockInterval = setInterval(() => { 
                     if(isCountdownMode) {
                         if(totalSeconds > 0) { totalSeconds--; }
-                        else {
-                            clearInterval(clockInterval); running = false;
-                            alert("Time Target Achieved!"); window.resetClock(); return;
-                        }
+                        else { clearInterval(clockInterval); running = false; alert("Time Target Achieved!"); window.resetClock(); return; }
                     } else { totalSeconds++; }
                     updateFlipDisplay(); 
                 }, 1000);
-            } else {
-                running = false; btn.innerText = "Resume Study"; btn.style.backgroundColor = "#22c55e";
-                clearInterval(clockInterval);
-            }
+            } else { running = false; btn.innerText = "Resume Study"; btn.style.backgroundColor = "#22c55e"; clearInterval(clockInterval); }
         }
 
         window.resetClock = function() {
-            running = false; clearInterval(clockInterval); totalSeconds = 0; isCountdownMode = false;
-            updateFlipDisplay();
+            running = false; clearInterval(clockInterval); totalSeconds = 0; isCountdownMode = false; updateFlipDisplay();
             document.getElementById('clock-status-text').innerText = `Mode: Free Flow Stopwatch`;
             document.getElementById('clock-overlay-title').innerHTML = `<i class="fa-solid fa-brain"></i> DEEP STUDY STREAM`;
-            const btn = document.getElementById('start-pause-btn');
-            btn.innerText = "Start Session"; btn.style.backgroundColor = "#22c55e";
+            const btn = document.getElementById('start-pause-btn'); btn.innerText = "Start Session"; btn.style.backgroundColor = "#22c55e";
         }
 
         function updateFlipDisplay() {
