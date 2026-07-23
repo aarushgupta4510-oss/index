@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Premium Hybrid Study Workspace (JEE / NEET)</title>
+    <title>AI Premium Hybrid Study Workspace (JEE / NEET) - Student</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
     <style>
         * {
@@ -21,85 +21,10 @@
             min-height: 100vh;
             padding: 40px 20px;
             color: #ffffff;
-            overflow-x: hidden;
         }
 
-        /* FANCY PARENT LANDING SCREEN */
-        #parent-landing-view {
+        .auth-container {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 85vh;
-            text-align: center;
-            color: #1e293b;
-            padding: 20px;
-        }
-
-        #parent-landing-view h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            margin-bottom: 15px;
-            background: linear-gradient(90deg, #2563EB, #dc2626);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        #parent-landing-view p {
-            font-size: 1.2rem;
-            color: #475569;
-            margin-bottom: 40px;
-            max-width: 600px;
-            font-weight: 600;
-        }
-
-        /* INTERACTIVE SLIDE TO UNLOCK BUTTON */
-        .slide-unlock-container {
-            position: relative;
-            width: 320px;
-            height: 60px;
-            background: #1e293b;
-            border-radius: 50px;
-            padding: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2);
-            user-select: none;
-            overflow: hidden;
-        }
-
-        .slide-unlock-text {
-            color: #94a3b8;
-            font-weight: 700;
-            font-size: 0.95rem;
-            z-index: 1;
-            transition: opacity 0.3s ease;
-        }
-
-        .slide-unlock-handle {
-            position: absolute;
-            left: 5px;
-            width: 50px;
-            height: 50px;
-            background: #2563EB;
-            border-radius: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            cursor: grab;
-            z-index: 2;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .slide-unlock-handle:active {
-            cursor: grabbing;
-        }
-
-        /* PREMIUM AUTH SCENE */
-        #auth-view {
-            display: none;
             justify-content: center;
             align-items: center;
             min-height: 85vh;
@@ -144,7 +69,6 @@
             font-weight: 600;
         }
 
-        /* MAIN DASHBOARD SCENE */
         #dashboard-view {
             display: none;
         }
@@ -501,18 +425,6 @@
 </head>
 <body>
 
-    <div id="parent-landing-view">
-        <h1>Hybrid Study Hub</h1>
-        <p>Your secure cloud workspace environment tailored for strategic JEE and NEET performance engineering.</p>
-        
-        <div class="slide-unlock-container" id="slide-container">
-            <div class="slide-unlock-text">Slide to Enter Workspace</div>
-            <div class="slide-unlock-handle" id="slide-handle">
-                <i class="fa-solid fa-angles-right"></i>
-            </div>
-        </div>
-    </div>
-
     <div id="auth-view" class="auth-container">
         <div class="auth-card">
             <h2 id="auth-title" style="color:#38bdf8; text-align:center;"><i class="fa-solid fa-lock"></i> Account Sign In</h2>
@@ -535,8 +447,8 @@
             <input type="email" id="auth-email" placeholder="Email Address">
             <input type="password" id="auth-password" placeholder="Secure Password">
             
-            <button class="action-btn" style="width:100%; margin-top:10px; background:#38bdf8; color:white;" id="auth-submit-btn">Login to Workspace</button>
-            <div class="auth-toggle" id="auth-toggle-btn">New student? Create an account (Sign Up)</div>
+            <button class="action-btn" style="width:100%; margin-top:10px; background:#38bdf8; color:white;" onclick="processAuthAction()" id="auth-submit-btn">Login to Workspace</button>
+            <div class="auth-toggle" id="auth-toggle-btn" onclick="toggleAuthMode()">New student? Create an account (Sign Up)</div>
         </div>
     </div>
 
@@ -544,14 +456,14 @@
         <header>
             <h1 id="welcome-heading">Hello User! 👋</h1>
             <p id="class-tagline">Strategic Study Focus Workspace</p>
-            <button class="logout-link" id="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Lock Screen</button>
+            <div style="margin-top: 10px; color: #475569; font-size: 0.85rem;" id="uid-container"></div>
+            <button class="logout-link" onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> Lock Screen</button>
         </header>
 
         <div class="dashboard-grid">
             <div class="column blue-column">
                 <div>
                     <h2><i class="fa-solid fa-list-check"></i> Daily Tasks</h2>
-                    
                     <div class="streak-card">
                         <div>
                             <span style="font-size:0.85rem; display:block; opacity:0.9;">🔥 Focus Streak</span>
@@ -564,20 +476,18 @@
                         <input type="text" id="todo-input" placeholder="Task Name (e.g., Solve Mock Problems)">
                         <div style="display: flex; gap: 10px;">
                             <input type="number" id="todo-time" placeholder="Target Time (Mins)" min="1">
-                            <button class="action-btn" id="todo-add-btn">Add Task</button>
+                            <button class="action-btn" onclick="addTodo()">Add Task</button>
                         </div>
                     </div>
                     <ul id="todo-list" class="item-list"></ul>
                 </div>
-                
                 <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.2); margin: 5px 0;">
-
                 <div>
                     <h2><i class="fa-solid fa-square-poll-vertical"></i> Custom Chapter Tracker</h2>
                     <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
                         <input type="text" id="task-title" placeholder="Topic details...">
                         <select id="task-subject"></select>
-                        <button class="action-btn" id="chapter-log-btn">Log Progress</button>
+                        <button class="action-btn" onclick="addTask()">Log Progress</button>
                     </div>
                     <ul id="task-list" class="item-list" style="margin-top: 15px;"></ul>
                 </div>
@@ -585,8 +495,7 @@
 
             <div class="column yellow-column">
                 <h2><i class="fa-solid fa-hourglass-start"></i> Focus Engine</h2>
-                
-                <div class="timer-box" id="launch-clock-box">
+                <div class="timer-box" onclick="openClockOverlay()">
                     <i class="fa-solid fa-expand-arrows-alt"></i>
                     <h3 style="font-size: 1.3rem; margin-bottom: 5px;">Launch Study Clock</h3>
                     <p id="clock-status-text" style="opacity: 0.8; font-size: 0.85rem;">Mode: Free Flow Stopwatch</p>
@@ -595,15 +504,12 @@
                 <div style="background: rgba(255, 255, 255, 0.15); padding: 20px; border-radius: 16px;">
                     <h3 style="font-size: 1.15rem; margin-bottom: 5px;"><i class="fa-solid fa-graduation-cap"></i> AI Auto-Syllabus Test Planner</h3>
                     <p style="font-size: 0.75rem; opacity: 0.9; margin-bottom: 10px;">Select chapters below to generate a phase strategy blueprint.</p>
-                    
                     <div style="display: flex; flex-direction: column; gap: 10px;">
                         <input type="text" id="planner-test-title" placeholder="Test Name (e.g., Major Mock Test-1)">
                         <input type="date" id="planner-test-date">
-                        
                         <label style="font-size: 0.8rem; font-weight: bold; margin-top: 5px; display: block;">Select Chapters to Include:</label>
                         <div class="syllabus-scroll-box" id="syllabus-checklist-container"></div>
-
-                        <button class="action-btn" style="margin-top: 10px;" id="generate-plan-btn">Generate Live Blueprint</button>
+                        <button class="action-btn" style="margin-top: 10px;" onclick="calculateDynamicSyllabusPlan()">Generate Live Blueprint</button>
                     </div>
                     <div id="planner-output-card" class="white-card" style="display: none; font-size: 0.85rem; color:#334155;"></div>
                 </div>
@@ -611,19 +517,16 @@
 
             <div class="column red-column">
                 <h2><i class="fa-solid fa-chart-pie"></i> Marks Performance Hub</h2>
-                
                 <div class="score-inputs-vertical-stack">
                     <div class="score-inputs-row">
                         <input type="date" id="score-date">
                         <input type="text" id="score-name" placeholder="Test Label">
                     </div>
                     <div id="dynamic-score-inputs-container"></div>
-                    <button class="action-btn" style="margin-top: 5px;" id="update-score-btn">Update Performance Hub</button>
+                    <button class="action-btn" style="margin-top: 5px;" onclick="addScore()">Update Performance Hub</button>
                 </div>
-
                 <div class="white-card"><div style="position: relative; height: 160px; width: 100%;"><canvas id="performanceChart"></canvas></div></div>
                 <div class="white-card"><div style="position: relative; height: 150px; width: 100%;"><canvas id="pieChart"></canvas></div></div>
-
                 <div class="white-card" style="padding: 10px;">
                     <div class="table-wrapper">
                         <table class="score-table">
@@ -647,7 +550,7 @@
                 <div class="flashcard-title"><i class="fa-solid fa-bolt"></i> High-Yield Hybrid Formula Desk</div>
                 <p id="formula-text" style="color: #cbd5e1; font-size: 0.95rem;">Loading targeted study pointers...</p>
             </div>
-            <button class="action-btn" style="padding: 10px 20px; font-size: 0.9rem; background: #334155; color: white;" id="next-formula-btn">Next Formula</button>
+            <button class="action-btn" style="padding: 10px 20px; font-size: 0.9rem; background: #334155; color: white;" onclick="rotateFormula()">Next Formula</button>
         </div>
     </div>
 
@@ -659,9 +562,10 @@
             <div class="flip-card" id="flip-sec">00</div>
         </div>
         <div class="clock-controls">
-            <button class="action-btn" style="background: #22c55e; color: white; padding: 15px 35px; font-size: 1.1rem; border-radius: 50px;" id="start-pause-btn">Start Session</button>
-            <button class="action-btn" style="background: #ef4444; color: white; padding: 15px 35px; font-size: 1.1rem; border-radius: 50px;" id="reset-clock-btn">Reset</button>
-            <button class="action-btn" style="background: #3f3f46; color: white; padding: 15px 35px; font-size: 1.1rem; border-radius: 50px;" id="exit-clock-btn">Exit View</button>
+            <button class="action-btn" style="background: #22c55e; color: white; padding: 15px 35px; font-size: 1.1rem; border-radius: 50px;" onclick="toggleClock()" id="start-pause-btn">Start Session</button>
+            <button class="action-btn" style="background: #3b82f6; color: white; padding: 15px 35px; font-size: 1.1rem; border-radius: 50px;" onclick="logSelfStudyTime()"><i class="fa-solid fa-paper-plane"></i> Send to Parent</button>
+            <button class="action-btn" style="background: #ef4444; color: white; padding: 15px 35px; font-size: 1.1rem; border-radius: 50px;" onclick="resetClock()">Reset</button>
+            <button class="action-btn" style="background: #3f3f46; color: white; padding: 15px 35px; font-size: 1.1rem; border-radius: 50px;" onclick="closeClockOverlay()">Exit View</button>
         </div>
     </div>
 
@@ -670,7 +574,6 @@
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Firebase Setup
         const firebaseConfig = {
           apiKey: "AIzaSyDtgU2S6fN2NFVzq9bhebydipumwUnAEhQ",
           authDomain: "hybrid-study-workspace-1.firebaseapp.com",
@@ -684,10 +587,9 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // State Machine
-        let isSignUpMode = false;
-        let activeUserMeta = null;
-        let state = { todos: [], chapters: [], tests: [], activeStrategicPlan: null, streak: 0 };
+        window.isSignUpMode = false;
+        window.activeUserMeta = null;
+        window.state = { todos: [], chapters: [], tests: [], activeStrategicPlan: null, streak: 0, studyLogs: [] };
 
         const MASTER_SYLLABUS = {
             "NEET": {
@@ -718,63 +620,15 @@
             }
         };
 
-        // INTERACTIVE SLIDER MECHANICS
-        const slideHandle = document.getElementById('slide-handle');
-        const slideContainer = document.getElementById('slide-container');
-        let isDragging = false;
-        let startX = 0;
-        const maxSlide = slideContainer.clientWidth - slideHandle.clientWidth - 10;
-
-        function startDrag(e) {
-            isDragging = true;
-            startX = (e.type === 'touchstart') ? e.touches[0].clientX : e.clientX;
-            slideHandle.style.transition = 'none';
-        }
-
-        function drag(e) {
-            if (!isDragging) return;
-            const currentX = (e.type === 'touchmove') ? e.touches[0].clientX : e.clientX;
-            let deltaX = currentX - startX;
-            if (deltaX < 0) deltaX = 0;
-            if (deltaX > maxSlide) deltaX = maxSlide;
-            slideHandle.style.left = (deltaX + 5) + 'px';
-
-            if (deltaX >= maxSlide) {
-                isDragging = false;
-                document.getElementById('parent-landing-view').style.display = 'none';
-                document.getElementById('auth-view').style.display = 'flex';
-                // Trigger auth state evaluation layout check
-                if (auth.currentUser) {
-                    document.getElementById('auth-view').style.display = 'none';
-                    document.getElementById('dashboard-view').style.display = 'block';
-                }
-            }
-        }
-
-        function stopDrag() {
-            if (!isDragging) return;
-            isDragging = false;
-            slideHandle.style.transition = 'left 0.3s ease';
-            slideHandle.style.left = '5px';
-        }
-
-        slideHandle.addEventListener('mousedown', startDrag);
-        slideHandle.addEventListener('touchstart', startDrag);
-        window.addEventListener('mousemove', drag);
-        window.addEventListener('touchmove', drag);
-        window.addEventListener('mouseup', stopDrag);
-        window.addEventListener('touchend', stopDrag);
-
-        // AUTH CONTROL ENGINE
-        document.getElementById('auth-toggle-btn').addEventListener('click', () => {
-            isSignUpMode = !isSignUpMode;
+        window.toggleAuthMode = function() {
+            window.isSignUpMode = !window.isSignUpMode;
             const title = document.getElementById('auth-title');
             const desc = document.getElementById('auth-desc');
             const extraFields = document.getElementById('signup-only-fields');
             const submitBtn = document.getElementById('auth-submit-btn');
             const toggleBtn = document.getElementById('auth-toggle-btn');
 
-            if(isSignUpMode) {
+            if(window.isSignUpMode) {
                 title.innerHTML = `<i class="fa-solid fa-user-plus"></i> Student Registration`;
                 desc.innerText = "Create your centralized cloud profile data vault.";
                 extraFields.style.display = "block";
@@ -787,9 +641,9 @@
                 submitBtn.innerText = "Login to Workspace";
                 toggleBtn.innerText = "New student? Create an account (Sign Up)";
             }
-        });
+        }
 
-        document.getElementById('auth-submit-btn').addEventListener('click', async () => {
+        window.processAuthAction = async function() {
             const email = document.getElementById('auth-email').value.trim();
             const password = document.getElementById('auth-password').value;
 
@@ -798,7 +652,7 @@
                 return;
             }
 
-            if(isSignUpMode) {
+            if(window.isSignUpMode) {
                 const name = document.getElementById('auth-name').value.trim();
                 const className = document.getElementById('auth-class').value;
                 const targetExam = document.getElementById('auth-exam').value;
@@ -812,7 +666,7 @@
                     const res = await createUserWithEmailAndPassword(auth, email, password);
                     const userMeta = { name, className, targetExam, email };
                     await setDoc(doc(db, "users", res.user.uid), userMeta);
-                    await setDoc(doc(db, "userData", res.user.uid), { todos: [], chapters: [], tests: [], activeStrategicPlan: null, streak: 0 });
+                    await setDoc(doc(db, "userData", res.user.uid), { todos: [], chapters: [], tests: [], activeStrategicPlan: null, streak: 0, studyLogs: [] });
                     alert("Account Created successfully!");
                 } catch (err) {
                     alert("Registration Error: " + err.message);
@@ -824,16 +678,16 @@
                     alert("Login Failed: Invalid Email or Password configuration.");
                 }
             }
-        });
+        }
 
-        document.getElementById('logout-btn').addEventListener('click', () => {
+        window.handleLogout = function() {
             signOut(auth).then(() => { location.reload(); });
-        });
+        }
 
         async function saveStateToCloud() {
             if(auth.currentUser) {
                 try {
-                    await setDoc(doc(db, "userData", auth.currentUser.uid), state);
+                    await setDoc(doc(db, "userData", auth.currentUser.uid), window.state);
                 } catch (e) {
                     console.error("Cloud sync error: ", e);
                 }
@@ -841,25 +695,28 @@
         }
 
         onAuthStateChanged(auth, async (user) => {
-            if(user && document.getElementById('parent-landing-view').style.display === 'none') {
+            if(user) {
                 document.getElementById('auth-view').style.display = 'none';
                 document.getElementById('dashboard-view').style.display = 'block';
 
+                document.getElementById('uid-container').innerHTML = `<strong>Student Sync Token (Provide to Parent):</strong> <code style='background:#f1f5f9; padding:2px 6px; border-radius:4px; color:#0f172a;'>${user.uid}</code>`;
+
                 const metaSnap = await getDoc(doc(db, "users", user.uid));
                 if(metaSnap.exists()) {
-                    activeUserMeta = metaSnap.data();
-                    document.getElementById('welcome-heading').innerText = `Hello ${activeUserMeta.name}! 👋`;
-                    document.getElementById('class-tagline').innerText = `Strategic Cloud Hub • Exam: ${activeUserMeta.targetExam} • Class Status: ${activeUserMeta.className}`;
+                    window.activeUserMeta = metaSnap.data();
+                    document.getElementById('welcome-heading').innerText = `Hello ${window.activeUserMeta.name}! 👋`;
+                    document.getElementById('class-tagline').innerText = `Strategic Cloud Hub • Exam: ${window.activeUserMeta.targetExam} • Class Status: ${window.activeUserMeta.className}`;
                 }
 
                 const dataSnap = await getDoc(doc(db, "userData", user.uid));
                 if(dataSnap.exists()) {
                     const cloudData = dataSnap.data();
-                    state.todos = cloudData.todos || [];
-                    state.chapters = cloudData.chapters || [];
-                    state.tests = cloudData.tests || [];
-                    state.activeStrategicPlan = cloudData.activeStrategicPlan || null;
-                    state.streak = cloudData.streak || 0;
+                    window.state.todos = cloudData.todos || [];
+                    window.state.chapters = cloudData.chapters || [];
+                    window.state.tests = cloudData.tests || [];
+                    window.state.activeStrategicPlan = cloudData.activeStrategicPlan || null;
+                    window.state.streak = cloudData.streak || 0;
+                    window.state.studyLogs = cloudData.studyLogs || [];
                 }
 
                 configureSubjectSelectors();
@@ -867,7 +724,7 @@
                 buildAutoSyllabusChecklist();
                 updateStreakUI();
                 initAppLifecycle();
-            } else if (!user && document.getElementById('parent-landing-view').style.display === 'none') {
+            } else {
                 document.getElementById('auth-view').style.display = 'flex';
                 document.getElementById('dashboard-view').style.display = 'none';
             }
@@ -875,9 +732,9 @@
 
         function configureSubjectSelectors() {
             const selectObj = document.getElementById('task-subject');
-            if(!selectObj || !activeUserMeta) return;
+            if(!selectObj || !window.activeUserMeta) return;
             selectObj.innerHTML = '';
-            const subs = activeUserMeta.targetExam === "JEE" ? ["Physics", "Chemistry", "Mathematics"] : ["Physics", "Chemistry", "Botany", "Zoology"];
+            const subs = window.activeUserMeta.targetExam === "JEE" ? ["Physics", "Chemistry", "Mathematics"] : ["Physics", "Chemistry", "Botany", "Zoology"];
             subs.forEach(s => {
                 let opt = document.createElement('option');
                 opt.value = s; opt.innerText = s;
@@ -887,10 +744,10 @@
 
         function configureScoreInputsLayout() {
             const container = document.getElementById('dynamic-score-inputs-container');
-            if(!container || !activeUserMeta) return;
+            if(!container || !window.activeUserMeta) return;
             container.innerHTML = '';
-            const subs = activeUserMeta.targetExam === "JEE" ? ["Physics", "Chemistry", "Mathematics"] : ["Physics", "Chemistry", "Botany", "Zoology"];
-            const maxVal = activeUserMeta.targetExam === "JEE" ? 100 : 180;
+            const subs = window.activeUserMeta.targetExam === "JEE" ? ["Physics", "Chemistry", "Mathematics"] : ["Physics", "Chemistry", "Botany", "Zoology"];
+            const maxVal = window.activeUserMeta.targetExam === "JEE" ? 100 : 180;
 
             let currentStr = `<div class="score-inputs-vertical-stack">`;
             for(let i=0; i < subs.length; i+=2) {
@@ -909,10 +766,10 @@
 
         function buildAutoSyllabusChecklist() {
             const box = document.getElementById('syllabus-checklist-container');
-            if(!box || !activeUserMeta) return;
+            if(!box || !window.activeUserMeta) return;
             box.innerHTML = '';
-            const exam = activeUserMeta.targetExam;
-            const targetClass = activeUserMeta.className;
+            const exam = window.activeUserMeta.targetExam;
+            const targetClass = window.activeUserMeta.className;
             const syllabusData = MASTER_SYLLABUS[exam] ? MASTER_SYLLABUS[exam][targetClass] : null;
 
             if(!syllabusData) return;
@@ -935,35 +792,48 @@
         }
 
         function updateStreakUI() {
-            document.getElementById('streak-counter-ui').innerText = `${state.streak || 0} Days`;
+            document.getElementById('streak-counter-ui').innerText = `${window.state.streak || 0} Days`;
             let badge = "Novice Learner";
-            if(state.streak >= 3) badge = "Focus Ninja 🥷";
-            if(state.streak >= 7) badge = "Elite Scholar 🎓";
+            if(window.state.streak >= 3) badge = "Focus Ninja 🥷";
+            if(window.state.streak >= 7) badge = "Elite Scholar 🎓";
             document.getElementById('badge-label').innerText = badge;
         }
 
-        // TASK APP EVENT LISTENERS
-        document.getElementById('todo-add-btn').addEventListener('click', async () => {
+        window.addTodo = async function() {
             const input = document.getElementById('todo-input');
             const timeInput = document.getElementById('todo-time');
             if (!input || !input.value.trim()) return;
-            state.todos.push({ text: input.value.trim(), timeLimit: timeInput.value ? parseInt(timeInput.value) : null });
+            window.state.todos.push({ text: input.value.trim(), timeLimit: timeInput.value ? parseInt(timeInput.value) : null });
             await saveStateToCloud(); 
             renderTodos();
             input.value = ''; timeInput.value = '';
-        });
+        }
 
-        document.getElementById('chapter-log-btn').addEventListener('click', async () => {
+        window.completeTask = async function(idx) {
+            window.state.todos.splice(idx, 1);
+            window.state.streak = (window.state.streak || 0) + 1;
+            await saveStateToCloud(); 
+            renderTodos(); 
+            updateStreakUI();
+        }
+
+        window.addTask = async function() {
             const title = document.getElementById('task-title');
             const subject = document.getElementById('task-subject');
             if (!title || !title.value.trim()) return;
-            state.chapters.push({ title: title.value.trim(), subject: subject.value });
+            window.state.chapters.push({ title: title.value.trim(), subject: subject.value });
             await saveStateToCloud(); 
             renderChapters(); 
             title.value = '';
-        });
+        }
 
-        document.getElementById('generate-plan-btn').addEventListener('click', async () => {
+        window.deleteChapter = async function(idx) {
+            window.state.chapters.splice(idx, 1); 
+            await saveStateToCloud(); 
+            renderChapters();
+        }
+
+        window.calculateDynamicSyllabusPlan = async function() {
             const title = document.getElementById('planner-test-title').value || "Mock Evaluation Framework";
             const dateVal = document.getElementById('planner-test-date').value;
             const checkboxes = document.querySelectorAll('.plan-chapter-checkbox:checked');
@@ -984,20 +854,26 @@
             const p2Days = Math.max(1, Math.floor(diffDays * 0.25));
             const p3Days = Math.max(1, diffDays - (p1Days + p2Days));
 
-            state.activeStrategicPlan = { title, diffDays, count: selectedChapters.length, p1Days, p2Days, p3Days };
+            window.state.activeStrategicPlan = { title, diffDays, count: selectedChapters.length, p1Days, p2Days, p3Days };
             await saveStateToCloud(); 
             renderStrategicPlan();
-        });
+        }
 
-        document.getElementById('update-score-btn').addEventListener('click', async () => {
+        window.clearStrategicPlan = async function() {
+            window.state.activeStrategicPlan = null; 
+            await saveStateToCloud(); 
+            renderStrategicPlan();
+        }
+
+        window.addScore = async function() {
             const date = document.getElementById('score-date').value;
             const name = document.getElementById('score-name').value || "Test Assessment";
             if (!date) { alert("Invalid date parameter."); return; }
 
             let scoreObj = { date, name };
-            const maxVal = activeUserMeta.targetExam === "JEE" ? 100 : 180;
+            const maxVal = window.activeUserMeta.targetExam === "JEE" ? 100 : 180;
 
-            if(activeUserMeta.targetExam === "JEE") {
+            if(window.activeUserMeta.targetExam === "JEE") {
                 const p = parseInt(document.getElementById('score-sub-physics').value) || 0;
                 const c = parseInt(document.getElementById('score-sub-chemistry').value) || 0;
                 const m = parseInt(document.getElementById('score-sub-mathematics').value) || 0;
@@ -1012,50 +888,33 @@
                 scoreObj.physics = p; scoreObj.chemistry = c; scoreObj.botany = b; scoreObj.zoology = z;
             }
 
-            state.tests.push(scoreObj);
+            window.state.tests.push(scoreObj);
             await saveStateToCloud(); 
             renderTable(); 
             updateChartsData();
             configureScoreInputsLayout(); 
-        });
+        }
 
-        document.getElementById('next-formula-btn').addEventListener('click', () => { rotateFormula(); });
+        window.deleteScore = async function(idx) {
+            window.state.tests.splice(idx, 1); 
+            await saveStateToCloud(); 
+            renderTable(); 
+            updateChartsData();
+        }
 
         function renderTodos() {
             const ul = document.getElementById('todo-list');
             if(!ul) return; ul.innerHTML = '';
-            state.todos.forEach((todo, idx) => {
+            window.state.todos.forEach((todo, idx) => {
                 const li = document.createElement('li');
                 const timeStr = todo.timeLimit ? ` (${todo.timeLimit}m)` : '';
-                
-                const taskContainer = document.createElement('div');
-                taskContainer.innerHTML = `<span>${todo.text}${timeStr}</span>`;
-                
-                const controlContainer = document.createElement('div');
-                
-                if (todo.timeLimit) {
-                    const loadBtn = document.createElement('button');
-                    loadBtn.className = 'badge-clock-btn';
-                    loadBtn.innerHTML = `<i class="fa-solid fa-clock"></i> Load`;
-                    loadBtn.addEventListener('click', () => loadTaskToClock(idx));
-                    controlContainer.appendChild(loadBtn);
-                }
-                
-                const checkBtn = document.createElement('button');
-                checkBtn.className = 'delete-btn';
-                checkBtn.style.background = 'rgba(255,255,255,0.25)';
-                checkBtn.innerHTML = `<i class="fa-solid fa-check"></i>`;
-                checkBtn.addEventListener('click', async () => {
-                    state.todos.splice(idx, 1);
-                    state.streak = (state.streak || 0) + 1;
-                    await saveStateToCloud(); 
-                    renderTodos(); 
-                    updateStreakUI();
-                });
-                
-                controlContainer.appendChild(checkBtn);
-                li.appendChild(taskContainer);
-                li.appendChild(controlContainer);
+                li.innerHTML = `
+                    <div><span>${todo.text}${timeStr}</span></div>
+                    <div>
+                        ${todo.timeLimit ? `<button class="badge-clock-btn" onclick="loadTaskToClock(${idx})"><i class="fa-solid fa-clock"></i> Load</button>` : ''}
+                        <button class="delete-btn" style="background:rgba(255,255,255,0.25);" onclick="completeTask(${idx})"><i class="fa-solid fa-check"></i></button>
+                    </div>
+                `;
                 ul.appendChild(li);
             });
         }
@@ -1063,34 +922,22 @@
         function renderChapters() {
             const ul = document.getElementById('task-list');
             if(!ul) return; ul.innerHTML = '';
-            state.chapters.forEach((ch, idx) => {
+            window.state.chapters.forEach((ch, idx) => {
                 const li = document.createElement('li');
-                li.innerHTML = `<span><strong>[${ch.subject}]</strong> ${ch.title}</span>`;
-                
-                const delBtn = document.createElement('button');
-                delBtn.className = 'delete-btn';
-                delBtn.style.background = 'rgba(255,255,255,0.25)';
-                delBtn.innerHTML = `<i class="fa-solid fa-check"></i>`;
-                delBtn.addEventListener('click', async () => {
-                    state.chapters.splice(idx, 1); 
-                    await saveStateToCloud(); 
-                    renderChapters();
-                });
-                
-                li.appendChild(delBtn);
+                li.innerHTML = `<span><strong>[${ch.subject}]</strong> ${ch.title}</span> <button class="delete-btn" style="background:rgba(255,255,255,0.25);" onclick="deleteChapter(${idx})"><i class="fa-solid fa-check"></i></button>`;
                 ul.appendChild(li);
             });
         }
 
         function renderStrategicPlan() {
             const targetBox = document.getElementById('planner-output-card');
-            if(!state.activeStrategicPlan) { targetBox.style.display = 'none'; return; }
+            if(!window.state.activeStrategicPlan) { targetBox.style.display = 'none'; return; }
             targetBox.style.display = 'block';
-            const plan = state.activeStrategicPlan;
+            const plan = window.state.activeStrategicPlan;
             targetBox.innerHTML = `
                 <div style="display:flex; justify-content:between; align-items:center; margin-bottom: 8px;">
                     <strong style="color:#1e3a8a;">🎯 Strategy: ${plan.title}</strong>
-                    <i class="fa-solid fa-square-xmark" id="clear-plan-cross" style="cursor:pointer; color:#ef4444; margin-left:auto; font-size:1.15rem;"></i>
+                    <i class="fa-solid fa-square-xmark" style="cursor:pointer; color:#ef4444; margin-left:auto; font-size:1.15rem;" onclick="clearStrategicPlan()"></i>
                 </div>
                 <p style="font-weight:bold; margin-bottom:5px;">⏳ ${plan.diffDays} Days Remaining for ${plan.count} Selected Topics</p>
                 <div class="phase-box" style="border-left-color: #2563eb;">
@@ -1106,25 +953,19 @@
                     Time-bound papers and error logs.
                 </div>
             `;
-            
-            document.getElementById('clear-plan-cross').addEventListener('click', async () => {
-                state.activeStrategicPlan = null; 
-                await saveStateToCloud(); 
-                renderStrategicPlan();
-            });
         }
 
         function renderTable() {
             const tbody = document.getElementById('score-table-body');
-            if (!tbody || !activeUserMeta) return; tbody.innerHTML = '';
-            state.tests.forEach((t, idx) => {
+            if (!tbody || !window.activeUserMeta) return; tbody.innerHTML = '';
+            window.state.tests.forEach((t, idx) => {
                 const row = document.createElement('tr');
-                let breakDownStr = activeUserMeta.targetExam === "JEE" ? 
+                let breakDownStr = window.activeUserMeta.targetExam === "JEE" ? 
                     `P:${t.physics} C:${t.chemistry} M:${t.mathematics}` : 
                     `P:${t.physics} C:${t.chemistry}<br>B:${t.botany} Z:${t.zoology}`;
                 
-                let maxPossible = activeUserMeta.targetExam === "JEE" ? 300 : 720;
-                let sumScore = activeUserMeta.targetExam === "JEE" ? 
+                let maxPossible = window.activeUserMeta.targetExam === "JEE" ? 300 : 720;
+                let sumScore = window.activeUserMeta.targetExam === "JEE" ? 
                     (t.physics + t.chemistry + t.mathematics) : 
                     (t.physics + t.chemistry + t.botany + t.zoology);
 
@@ -1132,28 +973,15 @@
                     <td><strong>${t.date}</strong><br><small style="color:#64748b;">${t.name}</small></td>
                     <td>${breakDownStr}</td>
                     <td><strong>${sumScore}</strong>/${maxPossible}</td>
+                    <td><button class="delete-btn" onclick="deleteScore(${idx})"><i class="fa-solid fa-trash"></i></button></td>
                 `;
-                
-                const actionsTd = document.createElement('td');
-                const delBtn = document.createElement('button');
-                delBtn.className = 'delete-btn';
-                delBtn.innerHTML = `<i class="fa-solid fa-trash"></i>`;
-                delBtn.addEventListener('click', async () => {
-                    state.tests.splice(idx, 1); 
-                    await saveStateToCloud(); 
-                    renderTable(); 
-                    updateChartsData();
-                });
-                
-                actionsTd.appendChild(delBtn);
-                row.appendChild(actionsTd);
                 tbody.appendChild(row);
             });
         }
 
         let performanceChart = null, pieChart = null;
         function initCharts() {
-            const maxRange = activeUserMeta && activeUserMeta.targetExam === "JEE" ? 100 : 180;
+            const maxRange = window.activeUserMeta && window.activeUserMeta.targetExam === "JEE" ? 100 : 180;
             const ctxLine = document.getElementById('performanceChart').getContext('2d');
             if(performanceChart) performanceChart.destroy();
             performanceChart = new Chart(ctxLine, {
@@ -1164,8 +992,8 @@
 
             const ctxPie = document.getElementById('pieChart').getContext('2d');
             if(pieChart) pieChart.destroy();
-            const pieLabels = activeUserMeta && activeUserMeta.targetExam === "JEE" ? ['Physics', 'Chemistry', 'Mathematics'] : ['Physics', 'Chemistry', 'Botany', 'Zoology'];
-            const pieColors = activeUserMeta && activeUserMeta.targetExam === "JEE" ? ['#3b82f6', '#eab308', '#a855f7'] : ['#3b82f6', '#eab308', '#10b981', '#ec4899'];
+            const pieLabels = window.activeUserMeta && window.activeUserMeta.targetExam === "JEE" ? ['Physics', 'Chemistry', 'Mathematics'] : ['Physics', 'Chemistry', 'Botany', 'Zoology'];
+            const pieColors = window.activeUserMeta && window.activeUserMeta.targetExam === "JEE" ? ['#3b82f6', '#eab308', '#a855f7'] : ['#3b82f6', '#eab308', '#10b981', '#ec4899'];
             
             pieChart = new Chart(ctxPie, {
                 type: 'pie',
@@ -1175,36 +1003,36 @@
         }
 
         function updateChartsData() {
-            if (!performanceChart || !pieChart || !activeUserMeta || !state.tests) return;
-            const labels = state.tests.map(t => t.date);
+            if (!performanceChart || !pieChart || !window.activeUserMeta || !window.state.tests) return;
+            const labels = window.state.tests.map(t => t.date);
             performanceChart.data.labels = labels;
 
             let datasets = [];
-            if(activeUserMeta.targetExam === "JEE") {
+            if(window.activeUserMeta.targetExam === "JEE") {
                 datasets = [
-                    { label: 'Physics', data: state.tests.map(t => t.physics), borderColor: '#3b82f6', fill: false, tension: 0.2 },
-                    { label: 'Chemistry', data: state.tests.map(t => t.chemistry), borderColor: '#eab308', fill: false, tension: 0.2 },
-                    { label: 'Mathematics', data: state.tests.map(t => t.mathematics), borderColor: '#a855f7', fill: false, tension: 0.2 }
+                    { label: 'Physics', data: window.state.tests.map(t => t.physics), borderColor: '#3b82f6', fill: false, tension: 0.2 },
+                    { label: 'Chemistry', data: window.state.tests.map(t => t.chemistry), borderColor: '#eab308', fill: false, tension: 0.2 },
+                    { label: 'Mathematics', data: window.state.tests.map(t => t.mathematics), borderColor: '#a855f7', fill: false, tension: 0.2 }
                 ];
                 performanceChart.data.datasets = datasets;
                 performanceChart.update();
 
                 let tP = 0, tC = 0, tM = 0;
-                state.tests.forEach(t => { tP += t.physics; tC += t.chemistry; tM += t.mathematics; });
+                window.state.tests.forEach(t => { tP += t.physics; tC += t.chemistry; tM += t.mathematics; });
                 pieChart.data.datasets[0].data = [tP, tC, tM];
                 pieChart.update();
             } else {
                 datasets = [
-                    { label: 'Physics', data: state.tests.map(t => t.physics), borderColor: '#3b82f6', fill: false, tension: 0.2 },
-                    { label: 'Chemistry', data: state.tests.map(t => t.chemistry), borderColor: '#eab308', fill: false, tension: 0.2 },
-                    { label: 'Botany', data: state.tests.map(t => t.botany), borderColor: '#10b981', fill: false, tension: 0.2 },
-                    { label: 'Zoology', data: state.tests.map(t => t.zoology), borderColor: '#ec4899', fill: false, tension: 0.2 }
+                    { label: 'Physics', data: window.state.tests.map(t => t.physics), borderColor: '#3b82f6', fill: false, tension: 0.2 },
+                    { label: 'Chemistry', data: window.state.tests.map(t => t.chemistry), borderColor: '#eab308', fill: false, tension: 0.2 },
+                    { label: 'Botany', data: window.state.tests.map(t => t.botany), borderColor: '#10b981', fill: false, tension: 0.2 },
+                    { label: 'Zoology', data: window.state.tests.map(t => t.zoology), borderColor: '#ec4899', fill: false, tension: 0.2 }
                 ];
                 performanceChart.data.datasets = datasets;
                 performanceChart.update();
 
                 let tP = 0, tC = 0, tB = 0, tZ = 0;
-                state.tests.forEach(t => { tP += t.physics; tC += t.chemistry; tB += t.botany; tZ += t.zoology; });
+                window.state.tests.forEach(t => { tP += t.physics; tC += t.chemistry; tB += t.botany; tZ += t.zoology; });
                 pieChart.data.datasets[0].data = [tP, tC, tB, tZ];
                 pieChart.update();
             }
@@ -1220,29 +1048,22 @@
             renderStrategicPlan();
         }
 
-        // CLOCK PIPELINE MECHANICS
-        let clockInterval, running = false, totalSeconds = 0, isCountdownMode = false;
+        let clockInterval, running = false, totalSeconds = 0, isCountdownMode = false, targetedTaskName = "Free Flow Focus";
+        window.openClockOverlay = function() { document.getElementById('clock-overlay').style.display = 'flex'; }
+        window.closeClockOverlay = function() { document.getElementById('clock-overlay').style.display = 'none'; }
         
-        document.getElementById('launch-clock-box').addEventListener('click', () => {
-            document.getElementById('clock-overlay').style.display = 'flex';
-        });
-        
-        document.getElementById('exit-clock-btn').addEventListener('click', () => {
-            document.getElementById('clock-overlay').style.display = 'none';
-        });
-
-        function loadTaskToClock(idx) {
-            const task = state.todos[idx];
+        window.loadTaskToClock = function(idx) {
+            const task = window.state.todos[idx];
             if(task && task.timeLimit) {
                 isCountdownMode = true; totalSeconds = task.timeLimit * 60;
+                targetedTaskName = task.text;
                 document.getElementById('clock-status-text').innerText = `Target: ${task.text} (${task.timeLimit} mins)`;
                 document.getElementById('clock-overlay-title').innerHTML = `<i class="fa-solid fa-bullseye"></i> TARGET: ${task.text.toUpperCase()}`;
-                updateFlipDisplay(); 
-                document.getElementById('clock-overlay').style.display = 'flex';
+                updateFlipDisplay(); window.openClockOverlay();
             }
         }
 
-        document.getElementById('start-pause-btn').addEventListener('click', () => {
+        window.toggleClock = function() {
             const btn = document.getElementById('start-pause-btn');
             if (!running) {
                 running = true; btn.innerText = "Pause Study"; btn.style.backgroundColor = "#eab308";
@@ -1251,7 +1072,7 @@
                         if(totalSeconds > 0) { totalSeconds--; }
                         else {
                             clearInterval(clockInterval); running = false;
-                            alert("Time Target Achieved!"); resetClock(); return;
+                            alert("Time Target Achieved!"); window.resetClock(); return;
                         }
                     } else { totalSeconds++; }
                     updateFlipDisplay(); 
@@ -1260,18 +1081,37 @@
                 running = false; btn.innerText = "Resume Study"; btn.style.backgroundColor = "#22c55e";
                 clearInterval(clockInterval);
             }
-        });
+        }
 
-        function resetClock() {
-            running = false; clearInterval(clockInterval); totalSeconds = 0; isCountdownMode = false;
+        window.logSelfStudyTime = async function() {
+            if (totalSeconds <= 0) {
+                alert("No focus duration recorded to push yet.");
+                return;
+            }
+            const minsStudied = Math.floor(totalSeconds / 60) || 1;
+            const currentTimestamp = new Date().toLocaleString();
+            
+            if(!window.state.studyLogs) window.state.studyLogs = [];
+            window.state.studyLogs.push({
+                timestamp: currentTimestamp,
+                duration: minsStudied,
+                label: targetedTaskName
+            });
+
+            await saveStateToCloud();
+            alert(`Success! Logged ${minsStudied} minute(s) to the parental monitoring hub.`);
+            window.resetClock();
+            window.closeClockOverlay();
+        }
+
+        window.resetClock = function() {
+            running = false; clearInterval(clockInterval); totalSeconds = 0; isCountdownMode = false; targetedTaskName = "Free Flow Focus";
             updateFlipDisplay();
             document.getElementById('clock-status-text').innerText = `Mode: Free Flow Stopwatch`;
             document.getElementById('clock-overlay-title').innerHTML = `<i class="fa-solid fa-brain"></i> DEEP STUDY STREAM`;
             const btn = document.getElementById('start-pause-btn');
             btn.innerText = "Start Session"; btn.style.backgroundColor = "#22c55e";
         }
-
-        document.getElementById('reset-clock-btn').addEventListener('click', resetClock);
 
         function updateFlipDisplay() {
             document.getElementById('flip-hr').innerText = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
@@ -1285,8 +1125,7 @@
             "Mathematics: Euler's Identity Formula: e^(iπ) + 1 = 0",
             "NEET Target Point: GFR Rate in dynamic individual: ~125 mL/min"
         ];
-        
-        function rotateFormula() {
+        window.rotateFormula = function() {
             const randomIdx = Math.floor(Math.random() * formulas.length);
             document.getElementById('formula-text').innerText = formulas[randomIdx];
         }
