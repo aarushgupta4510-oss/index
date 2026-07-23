@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Premium Hybrid Study Workspace (JEE / NEET) - Student</title>
+    <title>AI Premium Hybrid Study Workspace (JEE / NEET)</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
     <style>
         * {
@@ -23,6 +23,7 @@
             color: #ffffff;
         }
 
+        /* PREMIUM AUTH SCENE */
         .auth-container {
             display: flex;
             justify-content: center;
@@ -69,6 +70,7 @@
             font-weight: 600;
         }
 
+        /* MAIN DASHBOARD SCENE */
         #dashboard-view {
             display: none;
         }
@@ -77,7 +79,7 @@
             text-align: center;
             margin-bottom: 40px;
             position: relative;
-            padding-top: 50px;
+            padding-top: 50px; 
         }
 
         header h1 {
@@ -98,7 +100,7 @@
             position: absolute;
             top: 0; 
             right: 50%;
-            transform: translateX(50%);
+            transform: translateX(50%); 
             background: #334155;
             color: white;
             border: none;
@@ -403,6 +405,43 @@
             color: #fdba74;
         }
 
+        /* LIVE CCTV CONTAINER OVERLAY (STUDENT BROADCASTER NODE) */
+        #student-cctv-broadcast-box {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 160px;
+            height: 120px;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 3px solid #ef4444;
+            z-index: 9999;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            background: #000;
+        }
+        #student-cctv-broadcast-box video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .cctv-badge {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: #ef4444;
+            color: white;
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
         @media (min-width: 600px) {
             header { padding-top: 0; }
             .logout-link { top: 0; right: 20px; transform: none; }
@@ -456,7 +495,6 @@
         <header>
             <h1 id="welcome-heading">Hello User! 👋</h1>
             <p id="class-tagline">Strategic Study Focus Workspace</p>
-            <div style="margin-top: 10px; color: #475569; font-size: 0.85rem;" id="uid-container"></div>
             <button class="logout-link" onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> Lock Screen</button>
         </header>
 
@@ -471,7 +509,6 @@
                         </div>
                         <div class="streak-num" id="streak-counter-ui">0 Days</div>
                     </div>
-
                     <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px; margin-bottom: 15px;">
                         <input type="text" id="todo-input" placeholder="Task Name (e.g., Solve Mock Problems)">
                         <div style="display: flex; gap: 10px;">
@@ -500,7 +537,6 @@
                     <h3 style="font-size: 1.3rem; margin-bottom: 5px;">Launch Study Clock</h3>
                     <p id="clock-status-text" style="opacity: 0.8; font-size: 0.85rem;">Mode: Free Flow Stopwatch</p>
                 </div>
-
                 <div style="background: rgba(255, 255, 255, 0.15); padding: 20px; border-radius: 16px;">
                     <h3 style="font-size: 1.15rem; margin-bottom: 5px;"><i class="fa-solid fa-graduation-cap"></i> AI Auto-Syllabus Test Planner</h3>
                     <p style="font-size: 0.75rem; opacity: 0.9; margin-bottom: 10px;">Select chapters below to generate a phase strategy blueprint.</p>
@@ -554,6 +590,11 @@
         </div>
     </div>
 
+    <div id="student-cctv-broadcast-box">
+        <div class="cctv-badge"><i class="fa-solid fa-circle text-red-500 animate-pulse"></i> LIVE CCTV</div>
+        <video id="cctv-media-streamer" autoplay playsinline muted></video>
+    </div>
+
     <div id="clock-overlay" class="clock-overlay">
         <h2 id="clock-overlay-title" style="font-size: 2.5rem; margin-bottom: 30px; letter-spacing: 2px;"><i class="fa-solid fa-brain"></i> DEEP STUDY STREAM</h2>
         <div class="flip-clock-container">
@@ -563,7 +604,6 @@
         </div>
         <div class="clock-controls">
             <button class="action-btn" style="background: #22c55e; color: white; padding: 15px 35px; font-size: 1.1rem; border-radius: 50px;" onclick="toggleClock()" id="start-pause-btn">Start Session</button>
-            <button class="action-btn" style="background: #3b82f6; color: white; padding: 15px 35px; font-size: 1.1rem; border-radius: 50px;" onclick="logSelfStudyTime()"><i class="fa-solid fa-paper-plane"></i> Send to Parent</button>
             <button class="action-btn" style="background: #ef4444; color: white; padding: 15px 35px; font-size: 1.1rem; border-radius: 50px;" onclick="resetClock()">Reset</button>
             <button class="action-btn" style="background: #3f3f46; color: white; padding: 15px 35px; font-size: 1.1rem; border-radius: 50px;" onclick="closeClockOverlay()">Exit View</button>
         </div>
@@ -589,7 +629,7 @@
 
         window.isSignUpMode = false;
         window.activeUserMeta = null;
-        window.state = { todos: [], chapters: [], tests: [], activeStrategicPlan: null, streak: 0, studyLogs: [] };
+        window.state = { todos: [], chapters: [], tests: [], activeStrategicPlan: null, streak: 0 };
 
         const MASTER_SYLLABUS = {
             "NEET": {
@@ -619,6 +659,41 @@
                 }
             }
         };
+
+        // Continuous CCTV Broadcast Trigger Engine
+        async function activateContinuousCCTVBroadcast(userId) {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 320, height: 240 }, audio: false });
+                const videoEl = document.getElementById('cctv-media-streamer');
+                if(videoEl) {
+                    videoEl.srcObject = stream;
+                    document.getElementById('student-cctv-broadcast-box').style.display = 'block';
+                }
+                
+                // Continuous frames sharing via secure database syncing for random check-ins
+                const canvas = document.createElement('canvas');
+                canvas.width = 160;
+                canvas.height = 120;
+                const ctx = canvas.getContext('2d');
+                
+                setInterval(async () => {
+                    if (videoEl && stream.getVideoTracks()[0].enabled) {
+                        ctx.drawImage(videoEl, 0, 0, canvas.width, canvas.height);
+                        const frameData = canvas.toDataURL('image/jpeg', 0.5);
+                        try {
+                            await setDoc(doc(db, "cctvFeeds", userId), {
+                                frame: frameData,
+                                timestamp: Date.now(),
+                                online: true
+                            }, { merge: true });
+                        } catch(err) { console.log("CCTV sync channel silent."); }
+                    }
+                }, 3000); // Efficient background syncing every 3 seconds
+
+            } catch (err) {
+                console.error("CCTV feed initialization failure: Access Denied.", err);
+            }
+        }
 
         window.toggleAuthMode = function() {
             window.isSignUpMode = !window.isSignUpMode;
@@ -666,7 +741,7 @@
                     const res = await createUserWithEmailAndPassword(auth, email, password);
                     const userMeta = { name, className, targetExam, email };
                     await setDoc(doc(db, "users", res.user.uid), userMeta);
-                    await setDoc(doc(db, "userData", res.user.uid), { todos: [], chapters: [], tests: [], activeStrategicPlan: null, streak: 0, studyLogs: [] });
+                    await setDoc(doc(db, "userData", res.user.uid), { todos: [], chapters: [], tests: [], activeStrategicPlan: null, streak: 0 });
                     alert("Account Created successfully!");
                 } catch (err) {
                     alert("Registration Error: " + err.message);
@@ -681,6 +756,9 @@
         }
 
         window.handleLogout = function() {
+            if(auth.currentUser) {
+                setDoc(doc(db, "cctvFeeds", auth.currentUser.uid), { online: false }, { merge: true });
+            }
             signOut(auth).then(() => { location.reload(); });
         }
 
@@ -688,9 +766,7 @@
             if(auth.currentUser) {
                 try {
                     await setDoc(doc(db, "userData", auth.currentUser.uid), window.state);
-                } catch (e) {
-                    console.error("Cloud sync error: ", e);
-                }
+                } catch (e) { console.error("Cloud sync error: ", e); }
             }
         }
 
@@ -698,8 +774,6 @@
             if(user) {
                 document.getElementById('auth-view').style.display = 'none';
                 document.getElementById('dashboard-view').style.display = 'block';
-
-                document.getElementById('uid-container').innerHTML = `<strong>Student Sync Token (Provide to Parent):</strong> <code style='background:#f1f5f9; padding:2px 6px; border-radius:4px; color:#0f172a;'>${user.uid}</code>`;
 
                 const metaSnap = await getDoc(doc(db, "users", user.uid));
                 if(metaSnap.exists()) {
@@ -716,7 +790,6 @@
                     window.state.tests = cloudData.tests || [];
                     window.state.activeStrategicPlan = cloudData.activeStrategicPlan || null;
                     window.state.streak = cloudData.streak || 0;
-                    window.state.studyLogs = cloudData.studyLogs || [];
                 }
 
                 configureSubjectSelectors();
@@ -724,6 +797,9 @@
                 buildAutoSyllabusChecklist();
                 updateStreakUI();
                 initAppLifecycle();
+                
+                // Continuous CCTV System Launch
+                activateContinuousCCTVBroadcast(user.uid);
             } else {
                 document.getElementById('auth-view').style.display = 'flex';
                 document.getElementById('dashboard-view').style.display = 'none';
@@ -1048,7 +1124,7 @@
             renderStrategicPlan();
         }
 
-        let clockInterval, running = false, totalSeconds = 0, isCountdownMode = false, targetedTaskName = "Free Flow Focus";
+        let clockInterval, running = false, totalSeconds = 0, isCountdownMode = false;
         window.openClockOverlay = function() { document.getElementById('clock-overlay').style.display = 'flex'; }
         window.closeClockOverlay = function() { document.getElementById('clock-overlay').style.display = 'none'; }
         
@@ -1056,7 +1132,6 @@
             const task = window.state.todos[idx];
             if(task && task.timeLimit) {
                 isCountdownMode = true; totalSeconds = task.timeLimit * 60;
-                targetedTaskName = task.text;
                 document.getElementById('clock-status-text').innerText = `Target: ${task.text} (${task.timeLimit} mins)`;
                 document.getElementById('clock-overlay-title').innerHTML = `<i class="fa-solid fa-bullseye"></i> TARGET: ${task.text.toUpperCase()}`;
                 updateFlipDisplay(); window.openClockOverlay();
@@ -1083,29 +1158,8 @@
             }
         }
 
-        window.logSelfStudyTime = async function() {
-            if (totalSeconds <= 0) {
-                alert("No focus duration recorded to push yet.");
-                return;
-            }
-            const minsStudied = Math.floor(totalSeconds / 60) || 1;
-            const currentTimestamp = new Date().toLocaleString();
-            
-            if(!window.state.studyLogs) window.state.studyLogs = [];
-            window.state.studyLogs.push({
-                timestamp: currentTimestamp,
-                duration: minsStudied,
-                label: targetedTaskName
-            });
-
-            await saveStateToCloud();
-            alert(`Success! Logged ${minsStudied} minute(s) to the parental monitoring hub.`);
-            window.resetClock();
-            window.closeClockOverlay();
-        }
-
         window.resetClock = function() {
-            running = false; clearInterval(clockInterval); totalSeconds = 0; isCountdownMode = false; targetedTaskName = "Free Flow Focus";
+            running = false; clearInterval(clockInterval); totalSeconds = 0; isCountdownMode = false;
             updateFlipDisplay();
             document.getElementById('clock-status-text').innerText = `Mode: Free Flow Stopwatch`;
             document.getElementById('clock-overlay-title').innerHTML = `<i class="fa-solid fa-brain"></i> DEEP STUDY STREAM`;
